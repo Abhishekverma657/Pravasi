@@ -1,200 +1,180 @@
-// import { useState } from "react";
-
-// export default function FounderForm({ founder, setFounder }) {
-//   const [form, setForm] = useState(founder);
-
-//   const handleChange = (e) => {
-//     setForm({ ...form, [e.target.name]: e.target.value });
-//   };
-
-//   const saveFounder = () => {
-//     setFounder(form);
-//   };
-
-//   return (
-//     <div className="space-y-4">
-//       <img src={form.image} alt={form.name} className="w-32 h-32 rounded-lg object-cover border" />
-      
-//       <input
-//         type="text"
-//         name="name"
-//         value={form.name}
-//         onChange={handleChange}
-//         className="w-full p-2 border rounded"
-//       />
-
-//       <textarea
-//         name="about"
-//         value={form.about}
-//         onChange={handleChange}
-//         className="w-full p-2 border rounded"
-//         rows="3"
-//       />
-
-//       <button
-//         className="px-4 py-2 bg-[#D90165] text-white rounded-lg hover:bg-pink-700 transition"
-//         onClick={saveFounder}
-//       >
-//         Save
-//       </button>
-//     </div>
-//   );
-// }
-
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-hot-toast";
+import { addPerson, updatePerson } from "../../api/peopleApi";
+import Loader from "../Common/Loader";
+import AnimatedButton from "../Common/button";
+import { IMAGE_BASE_URL } from "../../utils/constants";
 
 const PLACEHOLDER =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="%23f9fafb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a1a1aa" font-size="28" font-family="Arial, sans-serif">No Image</text></svg>';
 
 export default function FounderForm({ initial, onSave, onClose }) {
   const [form, setForm] = useState({
+    _id: "",
     name: "",
+    role: "Founder",
     about: "",
-    image: ""
+    image: "",
   });
   const [imgPreview, setImgPreview] = useState("");
+  const [imageFile, setImageFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (initial) {
-      setForm(initial);
-      setImgPreview(initial.image || "");
+      setForm({
+        ...initial,
+        role: "Founder",
+      });
+      if (initial.image) {
+        setImgPreview(
+          initial.image.startsWith("http")
+            ? initial.image
+            : `${IMAGE_BASE_URL}${initial.image}`
+        );
+      } else {
+        setImgPreview("");
+      }
+      setImageFile(null);
+    } else {
+      setForm({
+        _id: "",
+        name: "",
+        role: "Founder",
+        about: "",
+        image: "",
+      });
+      setImgPreview("");
+      setImageFile(null);
     }
   }, [initial]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((p) => ({ ...p, [name]: value }));
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImgPreview(reader.result);
-      setForm((p) => ({ ...p, image: reader.result }));
-    };
-    reader.readAsDataURL(file);
+    setImageFile(file);
+    setImgPreview(URL.createObjectURL(file));
   };
 
-  const handleRemoveImage = () => {
-    setImgPreview("");
-    setForm((p) => ({ ...p, image: "" }));
-  };
-
-  const handleSave = () => {
-    if (!form.name.trim()) {
-      alert("Founder name required!");
+  const handleSave = async () => {
+    if (!form.name.trim() || !form.about.trim()) {
+      toast.error("Please fill all required fields");
       return;
     }
-    onSave(form);
-    onClose();
+    setLoading(true);
+    try {
+      const data = new FormData();
+      data.append("name", form.name);
+      data.append("role", "Founder");
+      data.append("about", form.about);
+      if (imageFile) data.append("image", imageFile);
+
+      let updatedFounder;
+      if (form._id) {
+        updatedFounder = await updatePerson(form._id, data);
+        toast.success("Founder updated successfully!");
+      } else {
+        updatedFounder = await addPerson(data);
+        toast.success("Founder added successfully!");
+      }
+      // Pass updated founder data to parent
+      if (onSave) onSave(updatedFounder.data);
+      onClose();
+    } catch (err) {
+      toast.error("Failed to save founder");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-50 flex items-center justify-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        {/* backdrop */}
+      {loading && <Loader />}
+      {!loading && (
         <motion.div
-          className="absolute inset-0 bg-black/30 backdrop-blur-[2px]"
-          onClick={onClose}
+          className="fixed inset-0 z-50 flex items-center justify-center"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        />
-
-        {/* modal box */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 30 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.9, y: 30 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="relative z-50 w-[95%] sm:w-2/3 lg:w-1/2 
-            bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200
-            p-6"
         >
-          {/* header */}
-          <div className="flex items-start justify-between">
-            <h3 className="text-xl font-semibold text-gray-800">Edit Founder</h3>
-            <button
-              onClick={onClose}
-              className="text-gray-500 hover:text-gray-800 text-2xl font-bold"
-            >
-              ×
-            </button>
-          </div>
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={onClose} />
+          <motion.div
+            className="relative bg-white rounded-2xl p-6 w-[90%] sm:w-2/3 lg:w-1/2 shadow-xl"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.9, opacity: 0 }}
+          >
+            <div className="flex justify-between mb-4">
+              <h2 className="text-xl font-semibold">{form._id ? "Edit Founder" : "Add Founder"}</h2>
+              <button onClick={onClose} className="text-gray-500 text-2xl">×</button>
+            </div>
 
-          {/* form */}
-          <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-5">
-            {/* image */}
-            <div className="col-span-1 flex flex-col items-center">
-              <div className="w-40 h-40 rounded-lg overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
-                <img
-                  src={imgPreview || form.image || PLACEHOLDER}
-                  alt="Founder"
-                  className="object-cover w-full h-full"
-                />
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+              <div className="flex flex-col items-center">
+                <img src={imgPreview || PLACEHOLDER} alt="Founder" className="w-40 h-40 rounded-lg object-cover border" />
+                <div className="mt-3 flex gap-2">
+                  <label htmlFor="founder-img" className="px-3 py-2 bg-[#D90165] text-white rounded-lg cursor-pointer">
+                    Choose
+                  </label>
+                  <input type="file" id="founder-img" className="hidden" onChange={handleFileChange} />
+                  {imgPreview && (
+                    <button
+                      onClick={() => {
+                        setImgPreview("");
+                        setImageFile(null);
+                        setForm((p) => ({ ...p, image: "" }));
+                      }}
+                      className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="mt-3 flex gap-2">
-                <label
-                  htmlFor="founder-image-upload"
-                  className="cursor-pointer px-3 py-2 bg-[#D90165] text-white rounded-lg text-sm hover:opacity-90 transition"
-                >
-                  Choose
-                </label>
+
+              <div className="col-span-2 space-y-3">
                 <input
-                  id="founder-image-upload"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="hidden"
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Founder Name"
+                  className="w-full p-3 border rounded-lg"
                 />
-                <button
-                  onClick={handleRemoveImage}
-                  className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg text-sm hover:bg-gray-300 transition"
-                >
-                  Remove
-                </button>
+                <textarea
+                  name="about"
+                  rows="4"
+                  value={form.about}
+                  onChange={handleChange}
+                  placeholder="About Founder"
+                  className="w-full p-3 border rounded-lg"
+                />
+
+                <div className="flex gap-3 mt-2">
+                  <AnimatedButton
+                    text="Save Changes"
+                    onClick={handleSave}
+                    loading={loading}
+                    type="button"
+                  />
+                  <button
+                    onClick={onClose}
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-
-            {/* inputs */}
-            <div className="col-span-2 space-y-4">
-              <input
-                type="text"
-                placeholder="Founder Name"
-                value={form.name}
-                onChange={(e) => setForm({ ...form, name: e.target.value })}
-                className="w-full p-3 rounded-lg bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D90165]"
-              />
-              <textarea
-                rows={5}
-                placeholder="About Founder"
-                value={form.about}
-                onChange={(e) => setForm({ ...form, about: e.target.value })}
-                className="w-full p-3 rounded-lg bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#D90165]"
-              />
-
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleSave}
-                  className="px-4 py-2 bg-[#D90165] text-white rounded-lg hover:opacity-95 transition"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={onClose}
-                  className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          </div>
+          </motion.div>
         </motion.div>
-      </motion.div>
+      )}
     </AnimatePresence>
   );
 }

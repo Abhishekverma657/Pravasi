@@ -1,11 +1,12 @@
 import HeroSliderRow from "./HeroSliderRow";
 
-export default function HeroSliderTable({ slides, onEdit, onDelete }) {
+export default function HeroSliderTable({ slides, onEdit, onDelete, onMove }) {
   return (
     <div className="bg-white rounded-xl shadow-lg overflow-hidden">
       <table className="w-full border-collapse">
         <thead className="bg-gray-100">
           <tr>
+            <th className="p-3 text-left">Order</th>
             <th className="p-3 text-left">Image</th>
             <th className="p-3 text-left">Title</th>
             <th className="p-3 text-left">Subtitle</th>
@@ -14,17 +15,20 @@ export default function HeroSliderTable({ slides, onEdit, onDelete }) {
         </thead>
         <tbody>
           {slides.length > 0 ? (
-            slides.map((slide) => (
+            slides.map((slide, idx) => (
               <HeroSliderRow
                 key={slide.id}
                 slide={slide}
+                index={idx}
+                total={slides.length}
                 onEdit={onEdit}
                 onDelete={onDelete}
+                onMove={onMove}
               />
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center p-6 text-gray-500">
+              <td colSpan="5" className="text-center p-6 text-gray-500">
                 No slides added yet
               </td>
             </tr>

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import BenefitCard from "../components/benefits/BenefitCard";
 import BenefitModal from "../components/benefits/BenefitModal";
 import SectionModal from "../components/benefits/SectionModal";
+import AnimatedButton from "../components/Common/button";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -52,12 +53,16 @@ export default function BenefitsSection() {
         <div className="bg-white p-4 rounded shadow mb-6">
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-[#EBA832]">{section.heading}</h1>
-            <button
+            <AnimatedButton
+              text="Edit Section"
+              onClick={() => setEditSection(true)}
+            />
+            {/* <button
               onClick={() => setEditSection(true)}
               className="bg-[#EBA832] text-white px-4 py-2 rounded hover:bg-[#d99b28]"
             >
               Edit Section
-            </button>
+            </button> */}
           </div>
           <p className="text-gray-600 mt-2">{section.subtitle}</p>
         </div>
@@ -66,12 +71,16 @@ export default function BenefitsSection() {
         <div className="bg-white p-4 rounded shadow">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold">Benefits List</h2>
-            <button
+            <AnimatedButton
+              text="Add Benefit"
+              onClick={() => setOpenModal(true)}
+            />
+            {/* <button
               onClick={() => setOpenModal(true)}
               className="bg-[#EBA832] text-white px-4 py-2 rounded hover:bg-[#d99b28]"
             >
               + Add Benefit
-            </button>
+            </button> */}
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">

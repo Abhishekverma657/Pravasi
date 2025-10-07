@@ -33,17 +33,15 @@ export default function BenefitCard({ data, onEdit, onDelete }) {
       <div className="flex justify-end gap-3 mt-5">
         <button
           onClick={() => onEdit(data)}
-          className="flex items-center gap-1 bg-blue-50 text-blue-600 
-                     px-3 py-1.5 rounded-lg text-sm hover:bg-blue-100 transition"
+          className=" bg-white/90 px-2 py-1 rounded-md shadow hover:bg-white text-sm "
         >
-          <Pencil size={14} /> Edit
+            Edit
         </button>
         <button
           onClick={() => onDelete(data.id)}
-          className="flex items-center gap-1 bg-red-50 text-red-600 
-                     px-3 py-1.5 rounded-lg text-sm hover:bg-red-100 transition"
+          className=" bg-red-50 px-2 py-1 rounded-md shadow hover:bg-red-100 text-sm  text-red-600"
         >
-          <Trash2 size={14} /> Delete
+            Delete
         </button>
       </div>
     </motion.div>

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import NewsCard from "../components/news/NewsCard";
 import NewsModal from "../components/news/NewsModal";
+import AnimatedButton from "../components/Common/button";
+import NewsDrawer from "../components/news/NewsDrawer"; // <-- ADD THIS
 
 export default function NewsPage() {
   const [open, setOpen] = useState(false);
@@ -24,6 +26,10 @@ export default function NewsPage() {
     },
   ]);
 
+  // Drawer state
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerData, setDrawerData] = useState(null);
+
   const handleSave = () => {
     if (form.id) {
       setList(list.map((item) => (item.id === form.id ? form : item)));
@@ -43,17 +49,21 @@ export default function NewsPage() {
     setList(list.filter((item) => item.id !== id));
   };
 
+  // Drawer open handler
+  const handleView = (item) => {
+    setDrawerData(item);
+    setDrawerOpen(true);
+  };
+
   return (
     <div className="p-6">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-orange-600">News & Updates</h2>
-        <button
+        <AnimatedButton
+          text="Add News"
           onClick={() => setOpen(true)}
-          className="bg-[#EBA832] text-white px-4 py-2 rounded-lg hover:opacity-90"
-        >
-          + Add News
-        </button>
+        />
       </div>
 
       {/* Cards Grid */}
@@ -64,6 +74,7 @@ export default function NewsPage() {
             data={item}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            onView={handleView} // <-- Pass view handler
           />
         ))}
       </div>
@@ -75,6 +86,13 @@ export default function NewsPage() {
         setForm={setForm}
         onSave={handleSave}
         onClose={() => setOpen(false)}
+      />
+
+      {/* Drawer */}
+      <NewsDrawer
+        open={drawerOpen}
+        data={drawerData}
+        onClose={() => setDrawerOpen(false)}
       />
     </div>
   );

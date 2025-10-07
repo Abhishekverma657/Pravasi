@@ -1,30 +1,57 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import AnimatedButton from "../Common/button";
+import { IMAGE_BASE_URL } from "../../utils/constants";
 
+const BASE = IMAGE_BASE_URL;
 const PLACEHOLDER =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="%23f9fafb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a1a1aa" font-size="28" font-family="Arial, sans-serif">No Image</text></svg>';
 
 export default function MediaBlogModal({ open, form, setForm, onSave, onClose }) {
-  // default object agar parent se undefined aaye
-  const safeForm = form || { id: null, title: "", subtitle: "", about: "", image: "" };
-
+  // id/_id dono handle karo
+  const safeForm = form || { id: null, _id: null, title: "", subtitle: "", about: "", image: "" };
   const [preview, setPreview] = useState(safeForm.image || "");
 
   useEffect(() => {
-    setPreview(safeForm.image || "");
-  }, [safeForm.image, open]);
+    if (form.image instanceof File) {
+      setPreview(URL.createObjectURL(form.image));
+    } else if (typeof form.image === "string" && form.image) {
+      setPreview(
+        form.image.startsWith("http") ? form.image : `${BASE}${form.image}`
+      );
+    } else {
+      setPreview("");
+    }
+  }, [form.image, open]);
 
   const handleImage = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-    setForm({ ...safeForm, image: url });
+    setPreview(URL.createObjectURL(file));
+    setForm({ ...safeForm, image: file });
   };
 
   const handleRemoveImage = () => {
     setPreview("");
     setForm({ ...safeForm, image: "" });
+  };
+
+  // Validation and Save
+  const handleSave = () => {
+    if (
+      !safeForm.title.trim() ||
+      !safeForm.subtitle.trim() ||
+      !safeForm.about.trim() ||
+      !safeForm.image
+    ) {
+      alert("All fields (Title, Subtitle, About, Image) are required!");
+      return;
+    }
+    onSave({
+      ...safeForm,
+      id: safeForm._id || safeForm.id || null, // prefer _id for backend
+      image: safeForm.image,
+    });
   };
 
   return (
@@ -58,7 +85,7 @@ export default function MediaBlogModal({ open, form, setForm, onSave, onClose })
             {/* Header */}
             <div className="flex items-start justify-between gap-4 p-6 border-b">
               <h2 className="text-lg font-semibold text-gray-800">
-                {safeForm.id ? "Edit Blog" : "Add Blog"}
+                {safeForm.id || safeForm._id ? "Edit Blog" : "Add Blog"}
               </h2>
               <button
                 onClick={onClose}
@@ -71,7 +98,7 @@ export default function MediaBlogModal({ open, form, setForm, onSave, onClose })
             {/* Body */}
             <div className="p-6 overflow-y-auto flex-1">
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Image Upload */}
+                {/* Image Upload Section */}
                 <div className="col-span-1 flex flex-col items-center">
                   <div className="w-40 h-40 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center overflow-hidden bg-gray-100">
                     <img
@@ -81,12 +108,13 @@ export default function MediaBlogModal({ open, form, setForm, onSave, onClose })
                     />
                   </div>
                   <div className="mt-3 flex gap-2">
-                    <label
-                      htmlFor="media-upload"
-                      className="px-4 py-2 bg-[#EBA832] text-white rounded-lg hover:opacity-95 transition"
-                    >
-                      Choose Image
-                    </label>
+                    <AnimatedButton
+                      text="Choose"
+                      onClick={() => document.getElementById("media-upload").click()}
+                      type="button"
+                      loading={false}
+                      className="px-4 py-2"
+                    />
                     <input
                       id="media-upload"
                       type="file"
@@ -135,15 +163,16 @@ export default function MediaBlogModal({ open, form, setForm, onSave, onClose })
 
             {/* Footer */}
             <div className="p-6 border-t flex items-center gap-3 justify-end">
-              <button
-                onClick={onSave}
-                className="px-4 py-2 bg-[#EBA832] text-white rounded-lg hover:opacity-95 transition"
-              >
-                Save
-              </button>
+              <AnimatedButton
+                text="Save"
+                onClick={handleSave}
+                loading={false}
+                type="button"
+              />
               <button
                 onClick={onClose}
                 className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300"
+                type="button"
               >
                 Cancel
               </button>

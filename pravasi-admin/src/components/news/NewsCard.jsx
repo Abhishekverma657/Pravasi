@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 
-export default function NewsCard({ data, onEdit, onDelete }) {
+export default function NewsCard({ data, onEdit, onDelete, onView }) {
   return (
     <motion.div
       className="bg-white rounded-2xl shadow-md overflow-hidden relative 
@@ -47,19 +47,25 @@ export default function NewsCard({ data, onEdit, onDelete }) {
         </div>
       </div>
 
-      {/* Edit/Delete buttons */}
+      {/* Edit/Delete/View buttons */}
       <div className="absolute top-3 right-3 flex gap-2">
         <button
           onClick={() => onEdit(data)}
-          className="bg-white text-blue-600 px-2 py-1 rounded shadow text-xs hover:bg-blue-50"
+          className="bg-white/90 px-2 py-1 rounded-md shadow hover:bg-white text-sm "
         >
           Edit
         </button>
         <button
           onClick={() => onDelete(data.id)}
-          className="bg-white text-red-600 px-2 py-1 rounded shadow text-xs hover:bg-red-50"
+          className="bg-red-50 px-2 py-1 rounded-md shadow hover:bg-red-100 text-sm  text-red-600"
         >
           Delete
+        </button>
+        <button
+          onClick={() => onView && onView(data)}
+          className="bg-blue-50 px-2 py-1 rounded-md shadow hover:bg-blue-100 text-sm text-blue-600"
+        >
+          View
         </button>
       </div>
     </motion.div>

@@ -153,7 +153,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       {/* Mobile Toggle Button */}
       {collapsed && (
         <button
-          className="fixed top-4 left-4 z-50 p-2 bg-gray-800 text-white rounded md:hidden shadow-lg"
+          className="fixed top-4 left-4 z-50 p-2bg-[#97479D] text-white rounded md:hidden shadow-lg"
           onClick={() => setCollapsed(false)}
         >
           ☰
@@ -163,7 +163,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       {/* Sidebar */}
       <div
         className={`
-          fixed top-0 left-0 h-screen w-56 bg-gray-800 text-white z-40
+          fixed top-0 left-0 h-screen w-56 bg-[#97479D] text-white z-40
           transition-transform duration-300 ease-in-out
           ${collapsed ? "-translate-x-full" : "translate-x-0"}
           md:translate-x-0 md:static
@@ -173,7 +173,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
         onScroll={handleScroll}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-700 sticky top-0 bg-gray-800 z-10">
+        <div className="flex items-center justify-between p-4  sticky top-0 bg-[#97479D] z-10">
           <h1 className="text-xl font-bold">Pravasi Admin</h1>
           <button
             className="md:hidden text-2xl"
@@ -191,7 +191,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
                 to={item.path}
                 className={({ isActive }) =>
                   `block px-4 py-2 rounded transition-all duration-300
-                  ${isActive ? "bg-[#D90165] text-white font-semibold scale-105" : "hover:bg-gray-700 hover:scale-105"}`
+                  ${isActive ? "bg-[#EBA832] text-white font-semibold scale-105" : "hover:bg-gray-600 hover:scale-105"}`
                 }
                 onClick={() => setCollapsed(true)}
               >

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import AnimatedButton from "../Common/button";
+import { IMAGE_BASE_URL } from "../../utils/constants";
 
 const PLACEHOLDER =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="%23f9fafb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a1a1aa" font-size="28" font-family="Arial, sans-serif">No Image</text></svg>';
@@ -18,27 +20,27 @@ export default function EventModal({ initial = null, onSave, onClose }) {
   useEffect(() => {
     if (initial) {
       setForm(initial);
-      setImgPreview(initial.image || "");
+      if (initial.image) {
+        setImgPreview(
+          initial.image.startsWith("http")
+            ? initial.image
+            : `${IMAGE_BASE_URL}${initial.image}`
+        );
+      } else {
+        setImgPreview("");
+      }
     } else {
       setForm({ id: null, title: "", subtitle: "", about: "", place: "", image: "" });
       setImgPreview("");
     }
   }, [initial]);
 
+  // Only for preview, not for form.image!
   const handleFileChange = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setImgPreview(reader.result);
-      setForm((p) => ({ ...p, image: reader.result }));
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
+    setImgPreview(URL.createObjectURL(file));
+    setForm((p) => ({ ...p, image: file }));
   };
 
   const handleRemoveImage = () => {
@@ -46,14 +48,20 @@ export default function EventModal({ initial = null, onSave, onClose }) {
     setForm((p) => ({ ...p, image: "" }));
   };
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((p) => ({ ...p, [name]: value }));
+  };
+
   const handleSave = () => {
     if (!form.title.trim()) {
       alert("Please enter title");
       return;
     }
+    // id/_id dono handle karo
     const eventToSave = {
       ...form,
-      id: form.id ?? Date.now()
+      id: form._id || form.id || undefined
     };
     onSave(eventToSave);
     onClose();
@@ -104,19 +112,20 @@ export default function EventModal({ initial = null, onSave, onClose }) {
             <div className="col-span-1 flex flex-col items-center">
               <div className="w-40 h-40 rounded-lg overflow-hidden border border-gray-300 bg-gray-100 flex items-center justify-center">
                 <img
-                  src={imgPreview || form.image || PLACEHOLDER}
+                  src={imgPreview || PLACEHOLDER}
                   alt="preview"
                   className="object-cover w-full h-full"
                 />
               </div>
 
               <div className="mt-3 flex gap-2">
-                <label
-                  htmlFor="event-image-upload"
-                  className="px-4 py-2 bg-[#EBA832] text-white rounded-lg hover:opacity-95 transition"
-                >
-                  Choose Image
-                </label>
+                <AnimatedButton
+                  text="Choose"
+                  onClick={() => document.getElementById("event-image-upload").click()}
+                  type="button"
+                  loading={false}
+                  className="px-4 py-2"
+                />
                 <input
                   id="event-image-upload"
                   type="file"
@@ -170,15 +179,16 @@ export default function EventModal({ initial = null, onSave, onClose }) {
               />
 
               <div className="flex items-center gap-3 mt-2">
-                <button
+                <AnimatedButton
+                  text="Save"
                   onClick={handleSave}
-                  className="px-4 py-2 bg-[#EBA832] text-white rounded-lg hover:opacity-95 transition"
-                >
-                  Save
-                </button>
+                  loading={false}
+                  type="button"
+                />
                 <button
                   onClick={onClose}
                   className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                  type="button"
                 >
                   Cancel
                 </button>

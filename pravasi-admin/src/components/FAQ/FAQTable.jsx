@@ -8,7 +8,7 @@ export default function FAQTable({ faqs, onEdit, onDelete, onToggleActive }) {
           <tr>
             <th className="p-3 text-left">Question</th>
             <th className="p-3 text-left">Answer</th>
-            <th className="p-3 text-center">Status</th>
+            {/* <th className="p-3 text-center">Status</th> */}
             <th className="p-3 text-center">Actions</th>
           </tr>
         </thead>
@@ -20,12 +20,12 @@ export default function FAQTable({ faqs, onEdit, onDelete, onToggleActive }) {
                 faq={faq}
                 onEdit={onEdit}
                 onDelete={onDelete}
-                onToggleActive={onToggleActive}
+                // onToggleActive={onToggleActive} // not needed now
               />
             ))
           ) : (
             <tr>
-              <td colSpan="4" className="text-center p-6 text-gray-500">
+              <td colSpan="3" className="text-center p-6 text-gray-500">
                 No FAQs added yet
               </td>
             </tr>

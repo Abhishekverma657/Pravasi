@@ -1,6 +1,7 @@
 import { useState } from "react";
 import GalleryCard from "../components/gallery/GalleryCard";
 import GalleryModal from "../components/gallery/GalleryModal";
+import AnimatedButton from "../components/Common/button";
 
 export default function GalleryPage() {
   const [gallery, setGallery] = useState([
@@ -43,7 +44,14 @@ export default function GalleryPage() {
     <div className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Gallery</h1>
-        <button
+        <AnimatedButton
+          text="Add Image"
+          onClick={() => {
+            setForm({ id: null, title: "", image: "" });
+            setModalOpen(true);
+          }}
+        />
+        {/* <button
           onClick={() => {
             setForm({ id: null, title: "", image: "" });
             setModalOpen(true);
@@ -51,7 +59,7 @@ export default function GalleryPage() {
           className="bg-[#EBA832] text-white px-4 py-2 rounded-lg hover:opacity-90"
         >
           + Add Image
-        </button>
+        </button> */}
       </div>
 
       {/* Gallery Grid */}
