@@ -1,35 +1,4 @@
-// import React from "react";
-
-// const MissionCard = ({ mission, onEdit, onDelete }) => {
-//   return (
-//     <div className="bg-white rounded-xl shadow-md p-4 flex flex-col justify-between transform transition duration-200 hover:scale-105 hover:shadow-xl h-52 max-h-56">
-//       <div className="flex-1 overflow-hidden">
-//         <h3 className="text-orange-600 font-semibold text-lg truncate">
-//           {mission.title}
-//         </h3>
-//         <p className="text-gray-700 mt-2 line-clamp-2 break-words">
-//           {mission.subtitle}
-//         </p>
-//       </div>
-//       <div className="flex justify-end mt-3 gap-2">
-//         <button
-//           onClick={() => onEdit(mission)}
-//           className="bg-white/90 px-2 py-1 rounded-md shadow hover:bg-white text-sm"
-//         >
-//           Edit
-//         </button>
-//         <button
-//           onClick={() => onDelete(mission._id)}
-//           className="bg-red-50 px-2 py-1 rounded-md shadow hover:bg-red-100 text-sm text-red-600"
-//         >
-//           Delete
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default MissionCard;
+ 
 
 import React from "react";
 import camelIcon from "../../../public/camel.png"; // 🐪 Common camel icon

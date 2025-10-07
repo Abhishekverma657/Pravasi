@@ -1,4 +1,5 @@
-const BASE = "http://31.97.231.85:2700";
+import { IMAGE_BASE_URL } from "../../utils/constants";
+const BASE = IMAGE_BASE_URL;
 
 export default function HeroSliderRow({ slide, index, total, onEdit, onDelete, onMove }) {
   const imgSrc = slide.image

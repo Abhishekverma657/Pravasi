@@ -1,17 +1,4 @@
-// export default function AnimatedButton({ text = "Click Me", onClick }) {
-//   return (
-//     <button
-//       onClick={onClick}
-//       className="relative px-5 py-2 rounded-lg font-semibold text-white 
-//                  bg-[#D90165] shadow-md transition-all duration-300 ease-in-out
-//                  hover:bg-[#b80054] hover:shadow-lg active:scale-[0.97]"
-//     >
-//       {text}
-//     </button>
-//   );
-// }
-
-// src/components/Common/button.jsx
+ 
 import { motion } from "framer-motion";
 
 export default function AnimatedButton({ text, onClick, loading = false }) {

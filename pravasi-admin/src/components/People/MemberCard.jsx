@@ -1,17 +1,4 @@
-// export default function MemberCard({ member }) {
-//   return (
-//     <div className="bg-gray-50 p-4 rounded-lg shadow hover:shadow-lg transition">
-//       <img
-//         src={member.image}
-//         alt={member.name}
-//         className="w-full h-40 object-cover rounded-md"
-//       />
-//       <h3 className="text-lg font-bold mt-2">{member.name}</h3>
-//       <p className="text-sm text-gray-600">{member.role}</p>
-//       <p className="text-sm mt-2">{member.about}</p>
-//     </div>
-//   );
-// }
+ 
 
 import React from "react";
 
