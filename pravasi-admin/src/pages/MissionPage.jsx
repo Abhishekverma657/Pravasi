@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Loader } from "lucide-react";
 import toast, { Toaster } from "react-hot-toast";
 import ConfirmDialog from "../components/Common/ConfirmDailog"; // <-- import
+import NoData from "../components/Common/NoData";
 
 const MissionPage = () => {
   const [missions, setMissions] = useState([]);
@@ -98,7 +99,11 @@ const MissionPage = () => {
           <AnimatedButton text="+ Add Mission" onClick={() => setShowForm(true)} />
         </div>
 
-        {loading && <Loader />}
+        {loading && (
+          <div className="flex justify-center items-center h-40">
+            <Loader size={30} color="#EBA832" />
+          </div>
+        )}
         {showForm && (
           <MissionForm
             onSubmit={handleSubmit}
@@ -110,14 +115,18 @@ const MissionPage = () => {
           />
         )}
         <div className="mt-6">
-          <MissionList
-            missions={missions}
-            onEdit={(m) => {
-              setEditData(m);
-              setShowForm(true);
-            }}
-            onDelete={handleDelete}
-          />
+          {missions.length === 0 ? (
+            <NoData text="No Missions Found" subtext="Start by adding your first mission!" />
+          ) : (
+            <MissionList
+              missions={missions}
+              onEdit={(m) => {
+                setEditData(m);
+                setShowForm(true);
+              }}
+              onDelete={handleDelete}
+            />
+          )}
         </div>
       </motion.div>
       {/* ConfirmDialog ek hi jagah yahan */}

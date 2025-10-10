@@ -1,4 +1,3 @@
- 
 import { useEffect, useState } from "react";
 import ContactTable from "../components/contacts/ContactTable";
 import ContactModal from "../components/contacts/ContactModal";
@@ -6,6 +5,7 @@ import { getContacts, deleteContact, toggleReadStatus } from "../api/contactApi"
 import { motion } from "framer-motion";
 import { toast } from "react-hot-toast";
 import ConfirmDialog from "../components/Common/ConfirmDailog"; // <-- Add this import
+import NoData from "../components/Common/NoData";
 
 export default function Contact() {
   const [contacts, setContacts] = useState([]);
@@ -72,6 +72,8 @@ export default function Contact() {
 
       {loading ? (
         <div className="flex justify-center py-20 text-gray-500">Loading...</div>
+      ) : contacts.length === 0 ? (
+        <NoData text="No Contacts Found" subtext="No one has contacted you yet!" />
       ) : (
         <ContactTable
           contacts={contacts}

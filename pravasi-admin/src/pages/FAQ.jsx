@@ -6,6 +6,7 @@ import FAQModal from "../components/FAQ/FAQModal";
 import AnimatedButton from "../components/Common/button";
 import ConfirmDialog from "../components/Common/ConfirmDailog";
 import Loader from "../components/Common/Loader";
+import NoData from "../components/Common/NoData";
 import toast, { Toaster } from "react-hot-toast";
 
 export default function FAQPage() {
@@ -93,9 +94,9 @@ export default function FAQPage() {
       </div>
 
       {loading ? (
-        <Loader text="Loading FAQs..." />
+        <div className="flex justify-center py-20 text-gray-500">Loading...</div>
       ) : faqs.length === 0 ? (
-        <p className="text-gray-400 text-center mt-10">No FAQs found.</p>
+        <NoData text="No Contacts Found" subtext="No one has contacted you yet!" />
       ) : (
         <FAQAccordion
           faqs={faqs}

@@ -1,32 +1,62 @@
- 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Loader from "../Common/Loader";
+import AnimatedButton from "../Common/button";
 
 const PLACEHOLDER =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="%23f9fafb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a1a1aa" font-size="28" font-family="Arial, sans-serif">No Image</text></svg>';
 
-export default function NewsModal({ open, form, setForm, onSave, onClose }) {
-  const [preview, setPreview] = useState(form.image || "");
+const BASE = "http://31.97.231.85:2700";
 
-  // update preview jab edit kare
+export default function NewsModal({ open, form, setForm, onSave, onClose, loading }) {
+  const [preview, setPreview] = useState("");
+
   useEffect(() => {
-    setPreview(form.image || "");
+    if (form.image instanceof File) {
+      setPreview(URL.createObjectURL(form.image));
+    } else if (typeof form.image === "string" && form.image) {
+      setPreview(
+        form.image.startsWith("http")
+          ? form.image
+          : `${BASE}${form.image}`
+      );
+    } else {
+      setPreview("");
+    }
   }, [form.image, open]);
 
   const handleImage = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreview(reader.result);
-      setForm((p) => ({ ...p, image: reader.result }));
-    };
-    reader.readAsDataURL(file);
+    setPreview(URL.createObjectURL(file));
+    setForm((p) => ({ ...p, image: file }));
   };
 
   const handleRemoveImage = () => {
     setPreview("");
     setForm((p) => ({ ...p, image: "" }));
+  };
+
+  function formatDate(dateStr) {
+    if (!dateStr) return "";
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr;
+    const d = new Date(dateStr);
+    return d.toISOString().slice(0, 10);
+  }
+
+  // Save handler: only send valid image
+  const handleSave = () => {
+    let imageToSend = "";
+    if (form.image instanceof File) {
+      imageToSend = form.image;
+    } else if (typeof form.image === "string" && form.image.trim() !== "") {
+      imageToSend = form.image;
+    }
+    const payload = {
+      ...form,
+      image: imageToSend,
+    };
+    onSave(payload);
   };
 
   return (
@@ -57,10 +87,17 @@ export default function NewsModal({ open, form, setForm, onSave, onClose }) {
             bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200
             max-h-[90vh] overflow-hidden flex flex-col"
           >
+            {/* Loader */}
+            {loading && (
+              <div className="absolute inset-0 bg-white/70 flex items-center justify-center z-50">
+                <Loader />
+              </div>
+            )}
+
             {/* Header */}
             <div className="flex items-start justify-between gap-4 p-6 border-b">
               <h2 className="text-lg font-semibold text-gray-800">
-                {form.id ? "Edit News" : "Add News"}
+                {form._id ? "Edit News" : "Add News"}
               </h2>
               <button
                 onClick={onClose}
@@ -83,12 +120,12 @@ export default function NewsModal({ open, form, setForm, onSave, onClose }) {
                     />
                   </div>
                   <div className="mt-3 flex gap-2">
-                    <label
-                      htmlFor="news-image-upload"
-                      className="px-4 py-2 bg-[#EBA832] text-white rounded-lg hover:opacity-95 transition"
-                    >
-                      Choose Image
-                    </label>
+                    <AnimatedButton
+                      text="Choose Image"
+                      onClick={() => document.getElementById("news-image-upload").click()}
+                      loading={false}
+                      type="button"
+                    />
                     <input
                       id="news-image-upload"
                       type="file"
@@ -119,7 +156,7 @@ export default function NewsModal({ open, form, setForm, onSave, onClose }) {
                   />
                   <input
                     type="date"
-                    value={form.date}
+                    value={formatDate(form.date)}
                     onChange={(e) => setForm({ ...form, date: e.target.value })}
                     className="w-full p-3 rounded-lg bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#EBA832]"
                   />
@@ -146,12 +183,12 @@ export default function NewsModal({ open, form, setForm, onSave, onClose }) {
 
             {/* Footer */}
             <div className="p-6 border-t flex items-center gap-3 justify-end">
-              <button
-                onClick={onSave}
-                className="px-4 py-2 bg-[#EBA832] text-white rounded-lg hover:opacity-95 transition"
-              >
-                Save
-              </button>
+              <AnimatedButton
+                text="Save"
+                onClick={handleSave}
+                loading={loading}
+                type="button"
+              />
               <button
                 onClick={onClose}
                 className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"

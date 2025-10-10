@@ -79,6 +79,7 @@ import GalleryPage from "./pages/GalleryPage";
 import MediaBlogs from "./pages/MediaBlogs";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";   
+import DashboardPage from "./pages/DashboardPage";
 
 
 function App() {
@@ -100,7 +101,7 @@ function App() {
           `}
         >
           <Routes>
-            <Route path="/" element={<HeroSlider />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/hero-slider" element={<HeroSlider />} />
             <Route path="/mission" element={<MissionPage />} />
             <Route path="/people" element={<PeoplePage />} />

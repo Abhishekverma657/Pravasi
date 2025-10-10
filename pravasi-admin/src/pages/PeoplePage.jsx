@@ -1,5 +1,3 @@
- 
-
 import { useEffect, useState } from "react";
 import {
   getPeople,
@@ -15,6 +13,7 @@ import ConfirmDialog from "../components/Common/ConfirmDailog";
 import AnimatedButton from "../components/Common/button";
 import { toast } from "react-hot-toast";
 import { IMAGE_BASE_URL } from "../utils/constants";
+import NoData from "../components/Common/NoData";
 
 export default function PeoplePage() {
   const [people, setPeople] = useState([]);
@@ -124,7 +123,14 @@ export default function PeoplePage() {
           <AnimatedButton text="+ Add Member" onClick={() => setShowMemberForm(true)} />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <Loader size={30} color="#EBA832" />
+        </div>
+      ) : members.length === 0 ? (
+        <NoData text="No Members Found" subtext="Start by adding your first member!" />
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {members.map((m) => (
             <MemberCard
               key={m._id}
@@ -137,6 +143,7 @@ export default function PeoplePage() {
             />
           ))}
         </div>
+      )}
       </div>
 
       {/* Modals */}

@@ -1,5 +1,3 @@
- 
-
 import { useEffect, useState } from "react";
 import EventList from "../components/events/EventList";
 import EventModal from "../components/events/EventModal";
@@ -8,6 +6,7 @@ import { getEvents, addEvent, updateEvent, deleteEvent } from "../api/eventApi";
 import toast, { Toaster } from "react-hot-toast";
 import Loader from "../components/Common/Loader";
 import ConfirmDialog from "../components/Common/ConfirmDailog";
+import NoData from "../components/Common/NoData";
 
 export default function FeaturedEventsPage() {
   const [events, setEvents] = useState([]);
@@ -84,7 +83,7 @@ export default function FeaturedEventsPage() {
       {loading ? (
         <Loader text="Loading Events..." />
       ) : events && events.length === 0 ? (
-        <p className="text-gray-400 text-center mt-10">No events found.</p>
+        <NoData text="No Events Found" subtext="Start by adding your first event!" />
       ) : (
         <EventList
           events={events}

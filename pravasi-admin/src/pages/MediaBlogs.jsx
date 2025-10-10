@@ -7,6 +7,7 @@ import MediaBlogDrawer from "../components/media&blogs/MediaBlogDrawer";
 import AnimatedButton from "../components/Common/button";
 import ConfirmDialog from "../components/Common/ConfirmDailog";
 import Loader from "../components/Common/Loader";
+import NoData from "../components/Common/NoData";
 
 export default function MediaBlogs() {
   const { blogs, loading, addBlog, editBlog, removeBlog } = useMediaBlogs();
@@ -62,16 +63,7 @@ export default function MediaBlogs() {
             <Loader text="Loading Blogs..." />
           </motion.div>
         ) : blogs && blogs.length === 0 ? (
-          <motion.p
-            key="noblog"
-            className="text-gray-400 text-center mt-10"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            transition={{ duration: 0.3 }}
-          >
-            No blogs found.
-          </motion.p>
+          <NoData text="No Blogs Found" subtext="Start by adding your first blog!" />
         ) : (
           <motion.div
             key="bloglist"

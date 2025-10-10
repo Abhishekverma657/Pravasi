@@ -1,4 +1,3 @@
- 
 import { useEffect, useState } from "react";
 import {
   getHeroSlides,
@@ -11,6 +10,7 @@ import HeroSliderModal from "../components/hero/HeroSliderModal";
 import AnimatedButton from "../components/Common/button";
 import ConfirmDialog from "../components/Common/ConfirmDailog";
 import Loader from "../components/Common/Loader";
+import NoData from "../components/Common/NoData";
 import { toast } from "react-hot-toast";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -111,30 +111,38 @@ export default function HeroSlider() {
       <div>
         <h2 className="text-xl font-bold mb-3">Live Slider Preview</h2>
         <div className="w-full max-w-5xl mx-auto rounded-2xl overflow-hidden shadow-lg">
-          <Slider {...sliderSettings}>
-            {slides.map((slide) => (
-              <div key={slide._id}>
-                <div
-                  className="w-full h-[350px] md:h-[450px] flex items-center justify-center relative"
-                  style={{
-                    backgroundImage: `url(http://31.97.231.85:2700${slide.image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                  }}
-                >
-                  <div className="absolute inset-0 bg-black/30" />
-                  <div className="relative z-10 w-full flex flex-col items-center justify-center text-center">
-                    <h2 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow mb-3">
-                      {slide.title}
-                    </h2>
-                    <p className="text-lg md:text-2xl text-white font-medium drop-shadow">
-                      {slide.subtitle}
-                    </p>
+          {loading ? (
+            <div className="flex justify-center items-center h-40">
+              <Loader size={30} color="#EBA832" />
+            </div>
+          ) : slides.length === 0 ? (
+            <NoData text="No Slides Found" subtext="Start by adding your first slide!" />
+          ) : (
+            <Slider {...sliderSettings}>
+              {slides.map((slide) => (
+                <div key={slide._id}>
+                  <div
+                    className="w-full h-[350px] md:h-[450px] flex items-center justify-center relative"
+                    style={{
+                      backgroundImage: `url(http://31.97.231.85:2700${slide.image})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-black/30" />
+                    <div className="relative z-10 w-full flex flex-col items-center justify-center text-center">
+                      <h2 className="text-3xl md:text-5xl font-extrabold text-white drop-shadow mb-3">
+                        {slide.title}
+                      </h2>
+                      <p className="text-lg md:text-2xl text-white font-medium drop-shadow">
+                        {slide.subtitle}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          )}
         </div>
       </div>
 
