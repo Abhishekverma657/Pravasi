@@ -127,6 +127,7 @@ import { useState, useEffect } from "react";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
   const menuItems = [
+    
     { name: "Dashboard", path: "/dashboard" },
     { name: "Hero Slider", path: "/hero-slider" },
     { name: "Mission", path: "/mission" },

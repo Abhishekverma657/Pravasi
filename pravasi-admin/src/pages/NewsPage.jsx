@@ -120,7 +120,7 @@ export default function NewsPage() {
     title: "",
     about: "",
     date: "",
-    category: "",
+    category: "GENERAL",   // <-- default to backend enum
     image: "",
   });
   const [confirmDelete, setConfirmDelete] = useState(null);
@@ -148,7 +148,8 @@ export default function NewsPage() {
       formData.append("title", form.title);
       formData.append("about", form.about);
       formData.append("date", form.date);
-      formData.append("category", form.category);
+      // send category exactly as stored (uppercase enum)
+      formData.append("category", (form.category || "GENERAL").toUpperCase());
       if (form.image instanceof File) formData.append("image", form.image);
 
       if (form._id) {
@@ -190,7 +191,7 @@ export default function NewsPage() {
         <AnimatedButton
           text="Add News"
           onClick={() => {
-            setForm({ _id: "", title: "", about: "", date: "", category: "", image: "" });
+            setForm({ _id: "", title: "", about: "", date: "", category: "GENERAL", image: "" }); // <-- set default enum
             setModalOpen(true);
           }}
         />
@@ -229,7 +230,7 @@ export default function NewsPage() {
         onSave={handleSave}
         onClose={() => {
           setModalOpen(false);
-          setForm({ _id: "", title: "", about: "", date: "", category: "", image: "" });
+          setForm({ _id: "", title: "", about: "", date: "", category: "GENERAL", image: "" });
         }}
         saving={saving}
       />

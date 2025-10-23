@@ -80,6 +80,8 @@ import MediaBlogs from "./pages/MediaBlogs";
 import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";   
 import DashboardPage from "./pages/DashboardPage";
+import MyuzeSubscription from "./components/MyuzeSubscription";
+ 
 
 
 function App() {
@@ -101,6 +103,7 @@ function App() {
           `}
         >
           <Routes>
+            <Route path="/" element={<DashboardPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/hero-slider" element={<HeroSlider />} />
             <Route path="/mission" element={<MissionPage />} />
@@ -117,11 +120,15 @@ function App() {
             <Route path="/contact" element={<Contact />} />
 
             <Route path="/faq" element={<FAQ />} />
+            <Route path="/myuze-subscription" element={<MyuzeSubscription />} />
+           
+
 
 
 
              
           </Routes>
+        
         </div>
       </div>
     </Router>

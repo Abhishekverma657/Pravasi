@@ -12,3 +12,19 @@
 .animate-zoom {
   animation: smoothZoom 6s ease-in-out infinite;
 }
+
+@keyframes scroll-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Faster scroll speed (20s instead of 25s) */
+.animate-scroll-x {
+  display: flex;
+  width: max-content;
+  animation: scroll-x 20s linear infinite;
+}

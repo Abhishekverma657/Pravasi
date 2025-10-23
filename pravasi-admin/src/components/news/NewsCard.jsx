@@ -1,77 +1,3 @@
-// import { motion } from "framer-motion";
-
-// export default function NewsCard({ data, onEdit, onDelete, onView }) {
-//   return (
-//     <motion.div
-//       className="bg-white rounded-2xl shadow-md overflow-hidden relative 
-//                  hover:shadow-2xl hover:-translate-y-1 transition-all 
-//                  duration-300 flex flex-col"
-//       initial={{ opacity: 0, y: 20 }}
-//       animate={{ opacity: 1, y: 0 }}
-//     >
-//       {/* Image */}
-//       <div className="w-full h-44 overflow-hidden">
-//         <img
-//           src={data.image}
-//           alt={data.title}
-//           className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-//         />
-//       </div>
-
-//       {/* Content */}
-//       <div className="flex flex-col flex-1 p-4">
-//         <div className="flex-1">
-//           <h3 className="font-bold text-lg text-gray-800 truncate">
-//             {data.title}
-//           </h3>
-//           <p className="text-xs text-gray-500 mt-1">{data.date}</p>
-//           <p className="text-sm text-gray-600 mt-2 line-clamp-3">
-//             {data.about}
-//           </p>
-//         </div>
-
-//         {/* Category always at bottom */}
-//         <div className="mt-3">
-//           <span
-//             className={`w-full block text-center px-3 py-1 rounded-full text-xs font-semibold 
-//               ${
-//                 data.category === "Crime"
-//                   ? "bg-red-100 text-red-600"
-//                   : data.category === "Donation"
-//                   ? "bg-blue-100 text-blue-600"
-//                   : "bg-green-100 text-green-600"
-//               }`}
-//           >
-//             {data.category}
-//           </span>
-//         </div>
-//       </div>
-
-//       {/* Edit/Delete/View buttons */}
-//       <div className="absolute top-3 right-3 flex gap-2">
-//         <button
-//           onClick={() => onEdit(data)}
-//           className="bg-white/90 px-2 py-1 rounded-md shadow hover:bg-white text-sm "
-//         >
-//           Edit
-//         </button>
-//         <button
-//           onClick={() => onDelete(data.id)}
-//           className="bg-red-50 px-2 py-1 rounded-md shadow hover:bg-red-100 text-sm  text-red-600"
-//         >
-//           Delete
-//         </button>
-//         <button
-//           onClick={() => onView && onView(data)}
-//           className="bg-blue-50 px-2 py-1 rounded-md shadow hover:bg-blue-100 text-sm text-blue-600"
-//         >
-//           View
-//         </button>
-//       </div>
-//     </motion.div>
-//   );
-// }
-
 import { motion } from "framer-motion";
 import { IMAGE_BASE_URL } from "../../utils/constants";
 
@@ -92,6 +18,22 @@ export default function NewsCard({ data, onEdit, onDelete, onView }) {
       ? data.image
       : `${IMAGE_BASE_URL}${data.image}`
     : "https://via.placeholder.com/400x200?text=No+Image";
+
+  // normalize category from backend (enum: CRIME|DONATION|GENERAL)
+  const cat = (data.category || "GENERAL").toUpperCase();
+  const displayCategory =
+    cat === "CRIME"
+      ? "Crime"
+      : cat === "DONATION"
+      ? "Donation"
+      : "General";
+
+  const categoryClass =
+    cat === "CRIME"
+      ? "bg-red-100 text-red-600"
+      : cat === "DONATION"
+      ? "bg-blue-100 text-blue-600"
+      : "bg-green-100 text-green-600";
 
   return (
     <motion.div
@@ -124,8 +66,8 @@ export default function NewsCard({ data, onEdit, onDelete, onView }) {
 
       {/* Bottom Category */}
       <div className="px-4 pb-6 mt-auto">
-        <span className="px-3 py-2 bg-orange-400 text-white text-center text-sm rounded-full uppercase font-medium">
-          {data.category}
+        <span className={`px-3 py-2 ${categoryClass} text-center text-sm rounded-full uppercase font-medium`}>
+          {displayCategory}
         </span>
       </div>
 

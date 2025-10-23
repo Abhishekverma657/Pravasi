@@ -172,10 +172,9 @@ export default function NewsModal({ open, form, setForm, onSave, onClose, loadin
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
                     className="w-full p-3 rounded-lg bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#EBA832]"
                   >
-                    <option value="Crime">Crime</option>
-                    <option value="Donation">Donation</option>
-                    <option value="General">General</option>
-                    <option value="News & Updates">News & Updates</option>
+                    <option value="CRIME">Crime</option>
+                    <option value="DONATION">Donation</option>
+                    <option value="GENERAL">General</option>
                   </select>
                 </div>
               </div>
