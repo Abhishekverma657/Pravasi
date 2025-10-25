@@ -1,5 +1,3 @@
- 
-
 import React from "react";
 
 const PLACEHOLDER =
@@ -44,8 +42,8 @@ export default function MemberCard({ member, onEdit, onDelete }) {
       <div className="p-4">
         <h3 className="text-lg font-semibold text-gray-800">{member.name}</h3>
         <div className="inline-block mt-2 mb-3">
-          <span className="px-3 py-1 rounded-full bg-[#fff1ef] text-[#d9480f] text-xs font-semibold">
-            {member.role || "Member"}
+          <span className="px-3 py-1 rounded-full bg-[#fff1ef] text-[#d9480f] text-xs font-semibold uppercase">
+            {member.role || "MEMBER"}
           </span>
         </div>
 

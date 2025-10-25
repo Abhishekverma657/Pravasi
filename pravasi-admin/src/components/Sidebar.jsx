@@ -135,10 +135,12 @@ export default function Sidebar({ collapsed, setCollapsed }) {
     { name: "Featured Events", path: "/featured-events" },
     { name: "Benefits", path: "/benefits" },
     { name: "News & Updates", path: "/news" },  
+      {name:"Featured Business ", path:"/business"},
     { name: "Gallery", path: "/gallery" },
     { name: "Media & Blogs", path: "/media-blogs" },
     { name: "Contact", path: "/contact" },
     { name: "FAQ", path: "/faq" },
+   
 
     
 

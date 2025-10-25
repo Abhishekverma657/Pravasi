@@ -81,6 +81,7 @@ import Contact from "./pages/Contact";
 import FAQ from "./pages/FAQ";   
 import DashboardPage from "./pages/DashboardPage";
 import MyuzeSubscription from "./components/MyuzeSubscription";
+import BusinessPage from "./pages/Business";
  
 
 
@@ -120,7 +121,9 @@ function App() {
             <Route path="/contact" element={<Contact />} />
 
             <Route path="/faq" element={<FAQ />} />
-            <Route path="/myuze-subscription" element={<MyuzeSubscription />} />
+            <Route path="/business" element={<BusinessPage />} />
+
+            {/* <Route path="/myuze-subscription" element={<MyuzeSubscription />} /> */}
            
 
 

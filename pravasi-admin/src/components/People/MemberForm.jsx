@@ -1,4 +1,3 @@
- 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-hot-toast";
@@ -53,7 +52,7 @@ export default function MemberForm({ initial, onClose, onSaved }) {
   };
 
   const handleSave = async () => {
-    if (!form.name.trim() || !form.about.trim()) {
+    if (!form.name.trim() || !form.about.trim() || !form.role.trim()) {
       toast.error("All fields required");
       return;
     }
@@ -61,7 +60,7 @@ export default function MemberForm({ initial, onClose, onSaved }) {
     try {
       const data = new FormData();
       data.append("name", form.name);
-      data.append("role", "Member");
+      data.append("role", form.role.toUpperCase()); // Convert to uppercase before saving
       data.append("about", form.about);
       if (imageFile) data.append("image", imageFile);
 
@@ -70,7 +69,7 @@ export default function MemberForm({ initial, onClose, onSaved }) {
       } else {
         await addPerson(data);
       }
-      if (onSaved) onSaved(); // Yeh zaroori hai!
+      if (onSaved) onSaved();
     } catch (err) {
       toast.error("Error saving member");
     } finally {
@@ -152,6 +151,14 @@ export default function MemberForm({ initial, onClose, onSaved }) {
                   onChange={handleChange}
                   placeholder="About Member"
                   className="w-full p-3 border rounded-lg"
+                />
+                <input
+                  type="text"
+                  name="role"
+                  value={form.role}
+                  onChange={handleChange}
+                  placeholder="Member Role"
+                  className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
                 />
                 <div className="flex gap-3 mt-2">
                   <AnimatedButton
