@@ -138,8 +138,12 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       {name:"Featured Business ", path:"/business"},
     { name: "Gallery", path: "/gallery" },
     { name: "Media & Blogs", path: "/media-blogs" },
+    // our root 
+    {name:"Our Root", path:"/our-root"},
+    {name:"Advertise", path :"/advertise"} ,
     { name: "Contact", path: "/contact" },
     { name: "FAQ", path: "/faq" },
+
    
 
     

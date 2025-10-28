@@ -82,6 +82,8 @@ import FAQ from "./pages/FAQ";
 import DashboardPage from "./pages/DashboardPage";
 import MyuzeSubscription from "./components/MyuzeSubscription";
 import BusinessPage from "./pages/Business";
+import OurRoot from "./pages/OurRootPage";
+import Advertise from "./pages/AdvertisePage";
  
 
 
@@ -119,6 +121,9 @@ function App() {
             <Route path="/media-blogs" element={<MediaBlogs />} />
            
             <Route path="/contact" element={<Contact />} />
+            <Route path="/our-root" element={<OurRoot />} />
+            <Route path="/advertise" element={<Advertise />} />
+            
 
             <Route path="/faq" element={<FAQ />} />
             <Route path="/business" element={<BusinessPage />} />
