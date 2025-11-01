@@ -18,6 +18,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
     { name: "Advertise", path: "/advertise" },
     { name: "Contact", path: "/contact" },
     { name: "FAQ", path: "/faq" },
+    { name: "Notifications", path: "/notifications" },
   ];
 
   const [scrollY, setScrollY] = useState(0);
