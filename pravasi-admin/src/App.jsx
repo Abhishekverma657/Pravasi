@@ -167,6 +167,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import NotificationList from "./components/notifications/NotificationList";
 import NotificationPage from "./pages/NotificationPage";
+import ChaptersPage from "./pages/ChaptersPage";
 
 function App() {
   const [collapsed, setCollapsed] = useState(true);
@@ -213,6 +214,7 @@ function App() {
                       <Route path="/faq" element={<FAQ />} />
                       <Route path="/business" element={<BusinessPage />} />
                       <Route path="/notifications" element={<NotificationPage />} />
+                      <Route path="/chapters/*" element={<ChaptersPage/>} />
                     </Routes>
                   </div>
                 </div>
