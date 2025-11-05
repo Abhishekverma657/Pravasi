@@ -62,14 +62,7 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
         ? item.isVerified
         : filter === "unverified"
         ? !item.isVerified
-        : filter === "phoneVerified"
-        ? item.phoneVerified
-        : filter === "phoneUnverified"
-        ? !item.phoneVerified
-        : filter === "emailVerified"
-        ? item.emailVerified
-        : filter === "emailUnverified"
-        ? !item.emailVerified
+     
         : true;
     return matchSearch && matchFilter;
   });
@@ -180,10 +173,7 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
             <option value="all">All</option>
             <option value="verified">Verified</option>
             <option value="unverified">Unverified</option>
-            <option value="phoneVerified">Phone Verified</option>
-            <option value="phoneUnverified">Phone Unverified</option>
-            <option value="emailVerified">Email Verified</option>
-            <option value="emailUnverified">Email Unverified</option>
+ 
           </select>
         </div>
       </div>
