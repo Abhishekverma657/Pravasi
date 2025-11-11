@@ -1,7 +1,7 @@
-const IMAGE_BASE = "http://31.97.231.85:2700/images/"; 
+ import { IMAGE_BASE_URL } from "../../utils/constants"; 
 
 export default function ChapterCard({ city, onEdit, onManagePeople, onPeopleView, onDelete }) {
-  const img = city.image ? (city.image.startsWith("http") ? city.image : `${IMAGE_BASE}${city.image}`) : null;
+  const img = city.image ? (city.image.startsWith("http") ? city.image : `${IMAGE_BASE_URL}/images/${city.image}`) : null;
 
   return (
     <div className="relative bg-white/95 backdrop-blur-sm border rounded-2xl shadow-md hover:shadow-lg transition-all p-4 overflow-hidden">

@@ -1,6 +1,7 @@
 import axios from "axios";
+import { BASE_URL } from "../utils/constants";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://31.97.231.85:2700/api/admin";
+const API_BASE = `${BASE_URL}/admin`;
 
 export const getBenefits = async () => {
   const res = await axios.get(`${API_BASE}/benefits`);

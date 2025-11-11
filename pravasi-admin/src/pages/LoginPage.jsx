@@ -72,7 +72,7 @@ export default function LoginPage() {
         </div>
 
         {/* Header */}
-        <h2 className="text-center text-3xl font-bold text-[#ff4081]">Welcome Back 💖</h2>
+        <h2 className="text-center text-3xl font-bold text-[#ff4081]">Welcome </h2>
         <p className="text-center text-gray-600 mt-2 mb-6 text-sm">
           Sign in to access your dashboard
         </p>

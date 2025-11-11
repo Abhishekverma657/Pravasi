@@ -1,33 +1,37 @@
 // src/api/newsApi.js
-const BASE_URL = "http://31.97.231.85:2700/api/admin/news";
+import axiosClient from "./axiosClient";
 
-export async function getNews() {
-  const res = await fetch(BASE_URL);
-  if (!res.ok) throw new Error("Failed to fetch news");
-  const json = await res.json();
-  return json.data || [];
-}
+// named exports used by NewsPage.jsx
+export const getNews = async () => {
+  const res = await axiosClient.get("/admin/news");
+  return res.data?.data || [];
+};
 
-export async function addNews(formData) {
-  const res = await fetch(BASE_URL, {
-    method: "POST",
-    body: formData,
+export const addNews = async (formData) => {
+  const res = await axiosClient.post("/admin/news", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
-  if (!res.ok) throw new Error("Failed to add news");
-  return await res.json();
-}
+  return res.data;
+};
 
-export async function updateNews(id, formData) {
-  const res = await fetch(`${BASE_URL}/${id}`, {
-    method: "PUT",
-    body: formData,
+export const updateNews = async (id, formData) => {
+  const res = await axiosClient.put(`/admin/news/${id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
   });
-  if (!res.ok) throw new Error("Failed to update news");
-  return await res.json();
-}
+  return res.data;
+};
 
-export async function deleteNews(id) {
-  const res = await fetch(`${BASE_URL}/${id}`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Failed to delete news");
-  return await res.json();
-}
+export const deleteNews = async (id) => {
+  const res = await axiosClient.delete(`/admin/news/${id}`);
+  return res.data;
+};
+
+// keep default export for other callers
+const newsApi = {
+  getAll: getNews,
+  create: addNews,
+  update: updateNews,
+  delete: deleteNews,
+};
+
+export default newsApi;

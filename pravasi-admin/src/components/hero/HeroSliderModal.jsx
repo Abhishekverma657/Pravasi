@@ -1,12 +1,12 @@
- 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedButton from "../Common/button";
+import Loader from "../Common/Loader";
 
 const PLACEHOLDER =
   'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="%23f9fafb"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="%23a1a1aa" font-size="28" font-family="Arial, sans-serif">No Image</text></svg>';
 
-export default function HeroSliderModal({ open, slide, onSave, onClose }) {
+export default function HeroSliderModal({ open, slide, onSave, onClose, loading = false }) {
   const [form, setForm] = useState({ title: "", subtitle: "", image: "" });
   const [imgPreview, setImgPreview] = useState("");
 
@@ -70,6 +70,9 @@ export default function HeroSliderModal({ open, slide, onSave, onClose }) {
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             className="relative z-50 w-[95%] sm:w-2/3 lg:w-1/2 bg-white rounded-2xl shadow-xl border p-6"
           >
+            {/* Modal loader overlay */}
+            {loading && <Loader text="Please wait..." />}
+
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">
                 {slide ? "Edit Slide" : "Add New Slide"}
@@ -77,6 +80,7 @@ export default function HeroSliderModal({ open, slide, onSave, onClose }) {
               <button
                 onClick={onClose}
                 className="text-gray-500 hover:text-gray-800 text-2xl font-bold"
+                disabled={loading}
               >
                 ×
               </button>
@@ -98,6 +102,7 @@ export default function HeroSliderModal({ open, slide, onSave, onClose }) {
                     type="button"
                     loading={false}
                     className="px-4 py-2"
+                    disabled={loading}
                   />
                   <input
                     type="file"
@@ -105,11 +110,13 @@ export default function HeroSliderModal({ open, slide, onSave, onClose }) {
                     accept="image/*"
                     className="hidden"
                     onChange={handleFileChange}
+                    disabled={loading}
                   />
                   {imgPreview && (
                     <button
                       onClick={handleRemoveImage}
                       className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition text-sm"
+                      disabled={loading}
                     >
                       Remove
                     </button>
@@ -124,6 +131,7 @@ export default function HeroSliderModal({ open, slide, onSave, onClose }) {
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
                   placeholder="Enter Title"
                   className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EBA832]"
+                  disabled={loading}
                 />
                 <input
                   type="text"
@@ -131,16 +139,20 @@ export default function HeroSliderModal({ open, slide, onSave, onClose }) {
                   onChange={(e) => setForm({ ...form, subtitle: e.target.value })}
                   placeholder="Enter Subtitle"
                   className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-[#EBA832]"
+                  disabled={loading}
                 />
 
                 <div className="flex gap-3 mt-2">
                   <AnimatedButton
                     text={slide ? "Update Slide" : "Add Slide"}
                     onClick={handleSubmit}
+                    loading={loading}
+                    disabled={loading}
                   />
                   <button
                     onClick={onClose}
                     className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+                    disabled={loading}
                   >
                     Cancel
                   </button>

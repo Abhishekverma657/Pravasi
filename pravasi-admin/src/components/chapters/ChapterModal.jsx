@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import AnimatedButton from "../../components/Common/button";
 import chapterApi from "../../api/chapterApi";
+import { IMAGE_BASE_URL } from "../../utils/constants";
 
 export default function ChapterModal({ open, onClose, onSaved, initialData = null, type = "india" }) {
   const [form, setForm] = useState({
@@ -19,7 +20,7 @@ export default function ChapterModal({ open, onClose, onSaved, initialData = nul
         contact: initialData.contact || { address: "", phone: "", email: "", website: "" },
         imageFile: null,
       });
-      setPreview(initialData.image ? (initialData.image.startsWith("http") ? initialData.image : `http://31.97.231.85:2700/${initialData.image}`) : "");
+      setPreview(initialData.image ? (initialData.image.startsWith("http") ? initialData.image : `${IMAGE_BASE_URL}/${initialData.image}`) : "");
     } else {
       setForm({
         name: "",

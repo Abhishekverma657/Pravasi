@@ -15,6 +15,7 @@ import { toast } from "react-hot-toast";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { IMAGE_BASE_URL } from "../utils/constants";
 
 export default function HeroSlider() {
   const [slides, setSlides] = useState([]);
@@ -124,7 +125,7 @@ export default function HeroSlider() {
                   <div
                     className="w-full h-[350px] md:h-[450px] flex items-center justify-center relative"
                     style={{
-                      backgroundImage: `url(http://31.97.231.85:2700${slide.image})`,
+                      backgroundImage: `url(${IMAGE_BASE_URL}${slide.image})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
@@ -155,6 +156,7 @@ export default function HeroSlider() {
             setModalOpen(false);
             setEditing(null);
           }}
+          loading={loading}
         />
       )}
 

@@ -1,10 +1,12 @@
+import { BASE_URL, IMAGE_BASE_URL } from "../../utils/constants";
+
  
 
 export default function EventCard({ event, onEdit, onDelete }) {
   return (
     <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
       <img
-        src={event.image?.startsWith("http") ? event.image : `http://31.97.231.85:2700${event.image}`}
+        src={event.image?.startsWith("http") ? event.image : `${IMAGE_BASE_URL}${event.image}`}
         alt={event.title}
         className="h-40 w-full object-cover"
       />

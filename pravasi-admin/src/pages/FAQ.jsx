@@ -96,7 +96,7 @@ export default function FAQPage() {
       {loading ? (
         <div className="flex justify-center py-20 text-gray-500">Loading...</div>
       ) : faqs.length === 0 ? (
-        <NoData text="No Contacts Found" subtext="No one has contacted you yet!" />
+        <NoData text="No FAQ Found" subtext="Please add some FAQs to get started." />
       ) : (
         <FAQAccordion
           faqs={faqs}

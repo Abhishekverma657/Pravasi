@@ -1,14 +1,15 @@
-import axios from 'axios';
-
-const BASE_URL = 'http://31.97.231.85:2700/api';
+import axiosClient from "./axiosClient";
 
 export const notificationApi = {
-  // Get all notifications
+  // Get all notifications (admin) with pagination
   getAll: async (page = 1) => {
     try {
-      const response = await axios.get(`${BASE_URL}/notification/admin-notifications?page=${page}`);
-      return response.data;
+      const res = await axiosClient.get("/notification/admin-notifications", {
+        params: { page },
+      });
+      return res.data;
     } catch (error) {
+      console.error("Failed to fetch notifications:", error.response?.data || error.message);
       throw error;
     }
   },
@@ -16,49 +17,39 @@ export const notificationApi = {
   // Send notification to all users
   sendToAll: async (data) => {
     try {
-      const notificationData = {
-        ...data,
-        sentBy: "admin" // Adding fixed sentBy field
-      };
-      
-      const response = await axios.post(`${BASE_URL}/notification/send-to-all`, notificationData);
-      console.log("Notification sent successfully:", response.data);
-
-      return response.data;
+      const payload = { ...data, sentBy: "admin" };
+      const res = await axiosClient.post("/notification/send-to-all", payload);
+      console.log("Notification sent successfully:", res.data);
+      return res.data;
     } catch (error) {
-      console.error("Error sending notification:", error);
+      console.error("Error sending notification:", error.response?.data || error.message);
       throw error;
     }
   },
 
-  // Delete notification
+  // Delete notification by id
   deleteNotification: async (notificationId) => {
     try {
-      const response = await axios.delete(`${BASE_URL}/notification/notifications/${notificationId}`);
-      return response.data;
+      const res = await axiosClient.delete(`/notification/notifications/${notificationId}`);
+      return res.data;
     } catch (error) {
-      console.error("Error deleting notification:", error);
+      console.error("Error deleting notification:", error.response?.data || error.message);
       throw error;
     }
   },
 
-  // Update notification
+  // Update notification by id
   updateNotification: async (notificationId, data) => {
     try {
-      const updateData = {
-        ...data,
-        sentBy: "admin" // Ensure sentBy remains admin
-      };
-      
-      const response = await axios.put(
-        `${BASE_URL}/notification/notifications/${notificationId}`, 
-        updateData
-      );
-      console.log("Notification updated successfully:", response.data);
-      return response.data;
+      const payload = { ...data, sentBy: "admin" };
+      const res = await axiosClient.put(`/notification/notifications/${notificationId}`, payload);
+      console.log("Notification updated successfully:", res.data);
+      return res.data;
     } catch (error) {
-      console.error("Error updating notification:", error);
+      console.error("Error updating notification:", error.response?.data || error.message);
       throw error;
     }
-  }
+  },
 };
+
+export default notificationApi;
