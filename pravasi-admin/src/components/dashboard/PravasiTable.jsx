@@ -1,8 +1,11 @@
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { toast } from "react-hot-toast";
+import { deleteUser as apiDeleteUser } from "../../api/dashboardApi";
+import ConfirmDialog from "../Common/ConfirmDailog";
 
-export default function PravasiTable({ list, onView, onVerify = () => {} }) {
+export default function PravasiTable({ list, onView, onVerify = () => {}, onDelete: onParentRefresh = () => {} }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState("all");
 
@@ -10,6 +13,10 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
   const [verifyModalOpen, setVerifyModalOpen] = useState(false);
   const [selected, setSelected] = useState(null);
   const [verifying, setVerifying] = useState(false); // local spinner state
+
+  // new: delete flow state
+  const [deleteItem, setDeleteItem] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -46,6 +53,31 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
     } finally {
       setVerifying(false);
       closeVerify();
+    }
+  };
+
+  const openDelete = (item) => {
+    setDeleteItem(item);
+  };
+  const closeDelete = () => {
+    if (deleting) return;
+    setDeleteItem(null);
+  };
+
+  const confirmDelete = async () => {
+    if (!deleteItem) return;
+    setDeleting(true);
+    try {
+      const id = deleteItem?.id ?? deleteItem?._id ?? deleteItem?.publicId;
+      await apiDeleteUser(id);
+      // refresh parent listing
+      await onParentRefresh();
+    } catch (err) {
+      console.error("Delete user error:", err);
+      alert("Failed to delete user. See console for details.");
+    } finally {
+      setDeleting(false);
+      setDeleteItem(null);
     }
   };
 
@@ -141,6 +173,75 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
     </div>
   );
 
+  // Delete modal (same look & placement as verify modal)
+  const deleteModal = deleteItem && (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      aria-modal="true"
+      role="dialog"
+    >
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.6 }}
+        exit={{ opacity: 0 }}
+        className="absolute inset-0 bg-black"
+        onClick={closeDelete}
+      />
+
+      <motion.div
+        initial={{ y: 30, opacity: 0, scale: 0.98 }}
+        animate={{ y: 0, opacity: 1, scale: 1 }}
+        exit={{ y: 20, opacity: 0, scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 300, damping: 25 }}
+        className="relative z-50 max-w-md w-full bg-white rounded-2xl shadow-xl p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-start gap-4">
+          <div className="flex-shrink-0">
+            <div className="h-12 w-12 rounded-lg bg-red-100 flex items-center justify-center text-red-600 text-xl font-bold">
+              !
+            </div>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">Confirm Delete</h3>
+            <p className="text-sm text-gray-600">
+              Are you sure you want to permanently delete{" "}
+              <span className="font-semibold text-gray-800">{deleteItem?.name}</span>{" "}
+              (ID: {deleteItem?.publicId})? This action cannot be undone.
+            </p>
+
+            <div className="mt-4 flex gap-3">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                className="flex-1 px-4 py-2 rounded-4xl bg-red-600 text-white font-medium inline-flex items-center justify-center gap-2"
+                onClick={confirmDelete}
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  "Yes, Delete"
+                )}
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                className="flex-1 px-4 py-2 rounded-4xl bg-gray-100 text-gray-700 font-medium"
+                onClick={closeDelete}
+                disabled={deleting}
+              >
+                Cancel
+              </motion.button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -189,7 +290,7 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
           {/* Table Head */}
           <thead>
             <tr className="bg-gradient-to-r from-indigo-50 to-blue-50 border-b border-gray-100 sticky top-0 z-10">
-              {["Unique ID", "Name", "Occupation", "Blood Group", "Current City", "View", "Verify"].map((head, i) => (
+              {["Unique ID", "Name", "Occupation", "Blood Group", "Current City", "View", "Verify", "Delete"].map((head, i) => (
                 <th
                   key={i}
                   className="p-3 text-[13px] font-semibold text-gray-700 uppercase tracking-wide"
@@ -257,6 +358,34 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
                       </motion.button>
                     )}
                   </td>
+
+                  {/* Delete column */}
+                  <td className="p-3 text-center">
+                    <motion.button
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        openDelete(p);
+                      }}
+                      className="inline-flex items-center justify-center px-3 py-1.5 text-sm font-medium text-white bg-gradient-to-r from-red-500 to-red-600 rounded-full shadow"
+                      disabled={deleting && deleteItem?.id === p.id}
+                    >
+                      {deleting && deleteItem?.id === p.id ? (
+                        <>
+                          <span className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+                          Deleting...
+                        </>
+                      ) : (
+                        <>
+                          <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M9 7V4a1 1 0 011-1h4a1 1 0 011 1v3" />
+                          </svg>
+                          Delete
+                        </>
+                      )}
+                    </motion.button>
+                  </td>
                 </motion.tr>
               ))
             ) : (
@@ -266,7 +395,7 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
                 transition={{ delay: 0.3 }}
               >
                 <td
-                  colSpan="7"
+                  colSpan="8"
                   className="text-center p-6 text-gray-500 text-sm italic"
                 >
                   No Pravasi Found 🙁
@@ -277,8 +406,9 @@ export default function PravasiTable({ list, onView, onVerify = () => {} }) {
         </motion.table>
       </div>
 
-      {/* Portal the modal to document.body to ensure it's always centered on viewport */}
+      {/* Portal the verify modal */}
       {createPortal(verifyModal, document.body)}
+      {createPortal(deleteModal, document.body)}
     </motion.div>
   );
 }

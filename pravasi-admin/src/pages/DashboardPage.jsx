@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import { getDashboardData, verifyPravasi } from "../api/dashboardApi";
+import { getDashboardData, verifyPravasi, deleteUser } from "../api/dashboardApi";
 import DashboardStats from "../components/dashboard/DashboardStats";
 import PravasiTable from "../components/dashboard/PravasiTable";
 import PravasiDrawer from "../components/dashboard/PravasiDrawer";
@@ -44,7 +44,12 @@ export default function DashboardPage() {
       ) : (
         <>
           <DashboardStats stats={data.statistics} />
-          <PravasiTable list={data.pravasiList} onView={setSelected} onVerify={handleVerify} />
+          <PravasiTable
+            list={data.pravasiList}
+            onView={setSelected}
+            onVerify={handleVerify}
+            onDelete={load} // <-- pass refresh function so table can refresh after delete
+          />
           <PravasiDrawer open={!!selected} pravasi={selected} onClose={() => setSelected(null)} />
         </>
       )}
