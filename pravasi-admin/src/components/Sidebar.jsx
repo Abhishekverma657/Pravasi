@@ -5,6 +5,7 @@ import { AuthContext } from "../context/AuthContext";
 export default function Sidebar({ collapsed, setCollapsed }) {
   const menuItems = [
     { name: "Dashboard", path: "/dashboard" },
+    { name: "About", path: "/about" },
     { name: "Hero Slider", path: "/hero-slider" },
     { name: "Mission", path: "/mission" },
     { name: "People List", path: "/people" },
@@ -19,7 +20,8 @@ export default function Sidebar({ collapsed, setCollapsed }) {
     { name: "Contact", path: "/contact" },
     { name: "FAQ", path: "/faq" },
     { name: "Notifications", path: "/notifications" },
-    {name:"Chapters", path:"/chapters" }
+    {name:"Chapters", path:"/chapters" },
+    {name:"Activity",path:"/activity"}
   ];
 
   const [scrollY, setScrollY] = useState(0);

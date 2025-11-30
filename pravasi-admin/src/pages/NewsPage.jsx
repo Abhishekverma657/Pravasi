@@ -22,7 +22,7 @@ export default function NewsPage() {
     title: "",
     about: "",
     date: "",
-    category: "GENERAL",   // <-- default to backend enum
+    category: "GENERAL",    
     image: "",
   });
   const [confirmDelete, setConfirmDelete] = useState(null);

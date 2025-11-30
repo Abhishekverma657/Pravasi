@@ -1,23 +1,33 @@
-import axios from "axios";
-
-import { BASE_URL } from "../utils/constants";
+import axiosClient from "./axiosClient";
 
 export const getMissions = async () => {
-  const res = await axios.get(`${BASE_URL}/admin/mission-cards`);
+  const res = await axiosClient.get("/admin/mission-cards");
   return res.data?.data || [];
 };
 
-export const addMission = async (mission) => {
-  const res = await axios.post(`${BASE_URL}/admin/mission-cards`, mission);
+export const addMission = async (formData) => {
+  // expects FormData
+  const res = await axiosClient.post("/admin/mission-cards", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return res.data;
 };
 
-export const updateMission = async (id, mission) => {
-  const res = await axios.put(`${BASE_URL}/admin/mission-cards/${id}`, mission);
+export const updateMission = async (id, formData) => {
+  const res = await axiosClient.put(`/admin/mission-cards/${id}`, formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
   return res.data;
 };
 
 export const deleteMission = async (id) => {
-  const res = await axios.delete(`${BASE_URL}/admin/mission-cards/${id}`);
+  const res = await axiosClient.delete(`/admin/mission-cards/${id}`);
   return res.data;
+};
+
+export default {
+  getMissions,
+  addMission,
+  updateMission,
+  deleteMission,
 };

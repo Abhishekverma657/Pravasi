@@ -102,6 +102,7 @@ export default function LoginPage() {
               type="password"
               name="password"
               placeholder="Enter your password"
+              
               value={formData.password}
               onChange={handleChange}
               className={`w-full px-4 py-3 rounded-xl bg-white border ${

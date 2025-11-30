@@ -9,7 +9,7 @@ const MissionCard = ({ mission, onEdit, onDelete }) => {
       className="relative bg-gradient-to-b from-orange-100 to-white rounded-2xl shadow-md 
                  flex flex-col items-center text-center 
                  p-6 h-72 w-full transition-transform duration-300 ease-out 
-                 hover:scale-[1.03] hover:shadow-lg"
+                 hover:scale-[1.04] hover:shadow-lg"
     >
       {/* Top-right action buttons */}
       <div className="absolute top-2 right-3 flex gap-2">

@@ -168,6 +168,8 @@ import { AuthProvider } from "./context/AuthContext";
 import NotificationList from "./components/notifications/NotificationList";
 import NotificationPage from "./pages/NotificationPage";
 import ChaptersPage from "./pages/ChaptersPage";
+import About from "./pages/About";
+import ActivityPage from "./pages/ActivityPage";
 
 function App() {
   const [collapsed, setCollapsed] = useState(true);
@@ -212,9 +214,12 @@ function App() {
                       <Route path="/our-root" element={<OurRoot />} />
                       <Route path="/advertise" element={<Advertise />} />
                       <Route path="/faq" element={<FAQ />} />
+                      <Route path="/about" element={<About />} />
                       <Route path="/business" element={<BusinessPage />} />
                       <Route path="/notifications" element={<NotificationPage />} />
                       <Route path="/chapters/*" element={<ChaptersPage/>} />
+                      <Route path="/activity" element={<ActivityPage/>}></Route>
+
                     </Routes>
                   </div>
                 </div>
