@@ -170,6 +170,7 @@ import NotificationPage from "./pages/NotificationPage";
 import ChaptersPage from "./pages/ChaptersPage";
 import About from "./pages/About";
 import ActivityPage from "./pages/ActivityPage";
+import SambalYojna from "./pages/SambalYojna";
 
 function App() {
   const [collapsed, setCollapsed] = useState(true);
@@ -219,6 +220,7 @@ function App() {
                       <Route path="/notifications" element={<NotificationPage />} />
                       <Route path="/chapters/*" element={<ChaptersPage/>} />
                       <Route path="/activity" element={<ActivityPage/>}></Route>
+                      <Route path="/sambal-yojna" element={<SambalYojna/>}></Route>
 
                     </Routes>
                   </div>

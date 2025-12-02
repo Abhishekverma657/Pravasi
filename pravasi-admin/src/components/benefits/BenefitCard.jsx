@@ -38,7 +38,7 @@ export default function BenefitCard({ data, onEdit, onDelete, index }) {
       </div>
 
       {/* Center Image (replaces icon) */}
-      <div className="flex justify-center items-center mt-2 mb-4">
+      <div className="flex justify-start pl-3 items-center mt-2 mb-4">
         {imageUrl ? (
           <img
             src={imageUrl}
