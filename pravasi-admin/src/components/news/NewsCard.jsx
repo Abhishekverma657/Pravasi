@@ -19,21 +19,25 @@ export default function NewsCard({ data, onEdit, onDelete, onView }) {
       : `${IMAGE_BASE_URL}${data.image}`
     : "https://via.placeholder.com/400x200?text=No+Image";
 
-  // normalize category from backend (enum: CRIME|DONATION|GENERAL)
-  const cat = (data.category || "GENERAL").toUpperCase();
+  // normalize category from backend (enum: CULTURAL|RAJASTHAN|INTERNATIONAL)
+  const cat = (data.category || "CULTURAL").toUpperCase();
   const displayCategory =
-    cat === "CRIME"
-      ? "Crime"
-      : cat === "DONATION"
-      ? "Donation"
-      : "General";
+    cat === "CULTURAL"
+      ? "Cultural"
+      : cat === "RAJASTHAN"
+      ? "Rajasthan"
+      : cat === "INTERNATIONAL"
+      ? "International"
+      : "Other";
 
   const categoryClass =
-    cat === "CRIME"
-      ? "bg-red-100 text-red-600"
-      : cat === "DONATION"
-      ? "bg-blue-100 text-blue-600"
-      : "bg-green-100 text-green-600";
+    cat === "CULTURAL"
+      ? "bg-yellow-100 text-yellow-700"
+      : cat === "RAJASTHAN"
+      ? "bg-orange-100 text-orange-700"
+      : cat === "INTERNATIONAL"
+      ? "bg-blue-100 text-blue-700"
+      : "bg-gray-100 text-gray-700";
 
   return (
     <motion.div

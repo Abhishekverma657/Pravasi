@@ -388,9 +388,9 @@ export default function NewsModal({ open, form, setForm, onSave, onClose, loadin
                     onChange={(e) => setForm({ ...form, category: e.target.value })}
                     className="w-full p-3 rounded-lg bg-white/70 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#EBA832]"
                   >
-                    <option value="CRIME">Crime</option>
-                    <option value="DONATION">Donation</option>
-                    <option value="GENERAL">General</option>
+                    <option value="CULTURAL">Cultural</option>
+                    <option value="RAJASTHAN">Rajasthan</option>
+                    <option value="INTERNATIONAL">International</option>
                   </select>
                 </div>
 

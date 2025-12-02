@@ -1,9 +1,16 @@
- 
-
 import React from "react";
-import camelIcon from "../../../public/camel.png"; // 🐪 Common camel icon
+import { IMAGE_BASE_URL } from "../../utils/constants";
+
+const PLACEHOLDER =
+  "data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"600\" height=\"600\"><rect width=\"100%\" height=\"100%\" fill=\"%23f9fafb\"/><text x=\"50%\" y=\"50%\" dominant-baseline=\"middle\" text-anchor=\"middle\" fill=\"%23a1a1aa\" font-size=\"28\" font-family=\"Arial, sans-serif\">No Image</text></svg>";
 
 const MissionCard = ({ mission, onEdit, onDelete }) => {
+  const imageUrl = mission.image
+    ? mission.image.startsWith("http")
+      ? mission.image
+      : `${IMAGE_BASE_URL}${mission.image}`
+    : PLACEHOLDER;
+
   return (
     <div
       className="relative bg-gradient-to-b from-orange-100 to-white rounded-2xl shadow-md 
@@ -27,12 +34,13 @@ const MissionCard = ({ mission, onEdit, onDelete }) => {
         </button>
       </div>
 
-      {/* Camel icon (animated float) */}
-      <div className="  w-16 h-16 rounded-full bg-orange-200 flex items-center justify-center mt-4 overflow-hidden">
+      {/* Mission image */}
+      <div className="w-16 h-16 rounded-full bg-orange-200 flex items-center justify-center mt-4 overflow-hidden">
         <img
-          src={camelIcon}
-          alt="Camel"
-          className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-110"
+          src={imageUrl}
+          alt="Mission"
+          className="w-full h-full object-cover"
+          style={{ aspectRatio: "1/1" }}
         />
       </div>
 
