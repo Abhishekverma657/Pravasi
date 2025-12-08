@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AnimatedButton from "../Common/button";
 import Loader from "../Common/Loader";
 import { toast } from "react-hot-toast";
+import { IMAGE_BASE_URL } from "../../utils/constants";
 
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
@@ -10,12 +11,18 @@ export default function AboutModal({ open, form, setForm, onSave, onClose, savin
   const [previews, setPreviews] = useState([]);
 
   useEffect(() => {
-    if (form.engagementImages) {
-      setPreviews(
-        form.engagementImages.map((img) =>
-          img instanceof File ? URL.createObjectURL(img) : img
-        )
-      );
+    if (form.engagementImages && open) {
+      const newPreviews = form.engagementImages.map((img) => {
+        if (img instanceof File) {
+          return URL.createObjectURL(img);
+        }
+        // Handle existing images from API
+        if (typeof img === "string") {
+          return img.startsWith("http") ? img : `${IMAGE_BASE_URL}${img}`;
+        }
+        return img;
+      });
+      setPreviews(newPreviews);
     }
   }, [form.engagementImages, open]);
 
@@ -65,15 +72,19 @@ export default function AboutModal({ open, form, setForm, onSave, onClose, savin
     }));
   };
 
-  // Images
+  // Images - Properly handle multiple select
   const handleImages = (e) => {
     const files = Array.from(e.target.files || []);
     const valid = files.filter((f) => f.size <= MAX_FILE_SIZE);
     if (valid.length < files.length) toast.error("Some files too large (max 5MB)");
+
     setForm((p) => ({
       ...p,
       engagementImages: [...(p.engagementImages || []), ...valid],
     }));
+
+    // Reset input so user can select same files again if needed
+    e.target.value = "";
   };
 
   const removeImage = (idx) => {
@@ -90,9 +101,23 @@ export default function AboutModal({ open, form, setForm, onSave, onClose, savin
     fd.append("ourObjective", JSON.stringify(form.ourObjective));
     fd.append("chapters", JSON.stringify(form.chapters));
     fd.append("engagementWithDiaspora", JSON.stringify(form.engagementWithDiaspora));
-    (form.engagementImages || []).forEach((img) => {
-      if (img instanceof File) fd.append("engagementImages", img);
+
+    // Handle images - separate new files from existing ones
+    const existingImages = [];
+    (form.engagementImages || []).forEach((img, idx) => {
+      if (img instanceof File) {
+        fd.append("engagementImages", img);
+      } else if (typeof img === "string") {
+        // Keep existing image URLs/paths
+        existingImages.push(img);
+      }
     });
+
+    // Send existing images as JSON array
+    if (existingImages.length > 0) {
+      fd.append("existingImages", JSON.stringify(existingImages));
+    }
+
     onSave(fd);
   };
 
@@ -283,7 +308,7 @@ export default function AboutModal({ open, form, setForm, onSave, onClose, savin
                   multiple
                   accept="image/*"
                   onChange={handleImages}
-                  className="mt-1"
+                  className="mt-1 block w-full"
                 />
                 <div className="flex gap-3 mt-3 flex-wrap">
                   {previews.map((src, idx) => (
@@ -294,7 +319,7 @@ export default function AboutModal({ open, form, setForm, onSave, onClose, savin
                     >
                       <img
                         src={src}
-                        alt=""
+                        alt="engagement"
                         className="object-cover w-full h-full"
                       />
                       <button

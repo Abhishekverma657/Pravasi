@@ -82,7 +82,7 @@ export default function About() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Images */}
           <div className="grid grid-cols-2 gap-4 md:w-1/2">
-            {(about?.images || []).map((img, idx) => (
+            {(about?.engagementImages || []).map((img, idx) => (
               <img
                 key={idx}
                 src={typeof img === "string" && img.startsWith("http") ? img : `${IMAGE_BASE_URL}${img}`}
