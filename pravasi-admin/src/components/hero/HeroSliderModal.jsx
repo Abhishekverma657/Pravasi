@@ -171,7 +171,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import AnimatedButton from "../Common/button";
 import Loader from "../Common/Loader";
 import { toast } from "react-hot-toast";
-import { IMAGE_BASE_URL } from "../../utils/constants";
+// import { IMAGE_BASE_URL } from "../../utils/constants";
 const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const PLACEHOLDER =
@@ -188,7 +188,7 @@ export default function HeroSliderModal({ open, slide, onSave, onClose, loading 
         subtitle: slide.subtitle || "",
         image: slide.image || "",
       });
-      setImgPreview(slide.image ? `${IMAGE_BASE_URL}${slide.image}` : "");
+      setImgPreview(slide.image ? `${slide.image}` : "");
     } else {
       setForm({ title: "", subtitle: "", image: "" });
       setImgPreview("");
@@ -225,7 +225,8 @@ export default function HeroSliderModal({ open, slide, onSave, onClose, loading 
     const data = new FormData();
     data.append("title", form.title);
     data.append("subtitle", form.subtitle);
-    if (form.image instanceof File) data.append("image", form.image);
+
+    data.append("image", form.image);
 
     onSave(data);
   };

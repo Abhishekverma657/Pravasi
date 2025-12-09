@@ -41,7 +41,7 @@ export default function HeroSliderRow({ slide, index, total, onEdit, onDelete, o
       </td>
       <td className="p-3">
         <img
-          src={imgSrc}
+          src={slide.image ? imgSrc : "https://via.placeholder.com/200x80?text=No+Image"}
           alt={slide.title}
           className="h-16 w-28 object-cover rounded border"
         />

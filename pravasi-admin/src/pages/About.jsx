@@ -3,7 +3,6 @@ import useAbout from "../hooks/useAbout";
 import AboutModal from "../components/about/AboutModal";
 import AnimatedButton from "../components/Common/button";
 import Loader from "../components/Common/Loader";
-import { IMAGE_BASE_URL } from "../utils/constants";
 
 export default function About() {
   const { about, loading, updateAbout } = useAbout();
@@ -14,7 +13,7 @@ export default function About() {
     ourObjective: [],
     chapters: [],
     engagementWithDiaspora: [],
-    engagementImages: [],
+    images: [],
   });
   const [saving, setSaving] = useState(false);
 
@@ -25,7 +24,7 @@ export default function About() {
       ourObjective: about?.ourObjective || [],
       chapters: about?.chapters || [],
       engagementWithDiaspora: about?.engagementWithDiaspora || [],
-      engagementImages: about?.engagementImages || [],
+      images: about?.images || [],
     });
     setShowModal(true);
   };
@@ -82,10 +81,10 @@ export default function About() {
         <div className="flex flex-col md:flex-row gap-8">
           {/* Images */}
           <div className="grid grid-cols-2 gap-4 md:w-1/2">
-            {(about?.engagementImages || []).map((img, idx) => (
+            {(about?.images || []).map((img, idx) => (
               <img
                 key={idx}
-                src={typeof img === "string" && img.startsWith("http") ? img : `${IMAGE_BASE_URL}${img}`}
+                src={img}
                 alt={`engagement-${idx}`}
                 className="rounded-2xl border-4 border-[#E74C3C] object-cover w-full h-40"
               />
@@ -103,7 +102,7 @@ export default function About() {
         </div>
       </section>
 
-      {/* Chapters (optional) */}
+      {/* Chapters */}
       {about?.chapters?.length > 0 && (
         <section className="mb-12">
           <h2 className="text-3xl font-bold text-[#E74C3C] mb-6 text-center">Chapters</h2>

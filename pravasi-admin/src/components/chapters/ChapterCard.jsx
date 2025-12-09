@@ -12,7 +12,7 @@ export default function ChapterCard({ city, onEdit, onManagePeople, onPeopleView
         {/* Image */}
         <div className="w-28 h-28 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 border">
           {img ? (
-            <img src={img} alt={city.name} className="w-full h-full object-cover" />
+            <img src={city.image} alt={city.name} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center text-gray-400">No Image</div>
           )}

@@ -98,7 +98,7 @@ export default function PeoplePage() {
             <img
               src={
                 founder.image
-                  ? `${IMAGE_BASE_URL}${founder.image}`
+                  ? `${founder.image}`
                   : "https://via.placeholder.com/150?text=No+Image"
               }
               alt={founder.name}
