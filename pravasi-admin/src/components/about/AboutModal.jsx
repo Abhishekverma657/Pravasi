@@ -84,6 +84,39 @@ export default function AboutModal({ open, form, setForm, onSave, onClose, savin
 
     onSave(fd);
   };
+  // ---------- STRING ARRAY HANDLERS ----------
+const handleStringArrayChange = (field, index, value) => {
+  const updated = [...form[field]];
+  updated[index] = value;
+  setForm({ ...form, [field]: updated });
+};
+
+const addStringArrayItem = (field) => {
+  setForm({ ...form, [field]: [...form[field], ""] });
+};
+
+const removeStringArrayItem = (field, index) => {
+  const updated = form[field].filter((_, i) => i !== index);
+  setForm({ ...form, [field]: updated });
+};
+
+
+// ---------- OBJECT ARRAY (title + subtitle) ----------
+const handleArrayChange = (field, index, key, value) => {
+  const updated = [...form[field]];
+  updated[index][key] = value;
+  setForm({ ...form, [field]: updated });
+};
+
+const addArrayItem = (field, item) => {
+  setForm({ ...form, [field]: [...form[field], item] });
+};
+
+const removeArrayItem = (field, index) => {
+  const updated = form[field].filter((_, i) => i !== index);
+  setForm({ ...form, [field]: updated });
+};
+
 
   return (
     <AnimatePresence>

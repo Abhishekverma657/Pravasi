@@ -83,7 +83,7 @@ export default function HeroSlider() {
     slidesToScroll: 1,
     arrows: true,
     autoplay: true,
-    autoplaySpeed: 3500,
+    autoplaySpeed: 2000, // was 3500, now 2000ms (2 seconds)
     adaptiveHeight: true,
     pauseOnHover: true,
   };
@@ -125,7 +125,7 @@ export default function HeroSlider() {
                   <div
                     className="w-full h-[350px] md:h-[450px] flex items-center justify-center relative"
                     style={{
-                      backgroundImage: `url(${IMAGE_BASE_URL}${slide.image})`,
+                      backgroundImage: `url(${slide.image})`,
                       backgroundSize: "cover",
                       backgroundPosition: "center",
                     }}
