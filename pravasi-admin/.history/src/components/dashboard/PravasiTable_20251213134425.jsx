@@ -83,7 +83,7 @@ export default function PravasiTable({ list, onView, onVerify = () => {}, onDele
 
   const filtered = list?.filter((item) => {
     const matchSearch =
-      (item.name || "").toLowerCase().includes(search.toLowerCase()) ||
+      item.name.toLowerCase().includes(search.toLowerCase()) ||
       item.publicId.toLowerCase().includes(search.toLowerCase()) ||
       item.occupation.toLowerCase().includes(search.toLowerCase()) ||
       item.currentCity.toLowerCase().includes(search.toLowerCase());
