@@ -19,8 +19,9 @@ export const deleteContact = async (id) => {
 };
 
 export const toggleReadStatus = async (id, read) => {
+  console.log(read);
   try {
-    const res = await axiosClient.patch(`/admin/contact-message/${id}/read`, { read });
+    const res = await axiosClient.patch(`/admin/contact-message/${id}/${read?'read':'unread'}`,);
     return res.data;
   } catch (err) {
     throw new Error(err.response?.data?.message || err.message || "Failed to update status");
