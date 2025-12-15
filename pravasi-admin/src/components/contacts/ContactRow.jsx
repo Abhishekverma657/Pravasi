@@ -1,5 +1,3 @@
- 
-
 import { motion } from "framer-motion";
 
 export default function ContactRow({ contact, onView, onDelete, onToggleRead, deleting }) {
@@ -40,7 +38,11 @@ export default function ContactRow({ contact, onView, onDelete, onToggleRead, de
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => onToggleRead(contact._id, contact.read)}
-          className="px-3 py-1 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 shadow-sm"
+          className={`px-3 py-1 rounded-md shadow-sm text-white ${
+            !contact.read
+              ? "bg-yellow-500 hover:bg-yellow-600"
+              : "bg-blue-500 hover:bg-blue-600"
+          }`}
         >
           {contact.read ? "Mark Unread" : "Mark Read"}
         </motion.button>

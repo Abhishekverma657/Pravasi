@@ -19,7 +19,12 @@ export default function Contact() {
     setLoading(true);
     try {
       const data = await getContacts();
-      setContacts(data);
+      // Map isRead to read for compatibility
+      const mapped = data.map((c) => ({
+        ...c,
+        read: typeof c.read !== "undefined" ? c.read : c.isRead,
+      }));
+      setContacts(mapped);
     } catch (err) {
       toast.error(err.message);
     } finally {
