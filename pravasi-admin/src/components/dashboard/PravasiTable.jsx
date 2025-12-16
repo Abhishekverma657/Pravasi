@@ -4,6 +4,8 @@ import { createPortal } from "react-dom";
 import { toast } from "react-hot-toast";
 import { deleteUser as apiDeleteUser } from "../../api/dashboardApi";
 import ConfirmDialog from "../Common/ConfirmDailog";
+import { exportPravasiToExcel } from "../../utils/exportPravasi";
+
 
 export default function PravasiTable({ list, onView, onVerify = () => {}, onDelete: onParentRefresh = () => {} }) {
   const [search, setSearch] = useState("");
@@ -252,7 +254,21 @@ export default function PravasiTable({ list, onView, onVerify = () => {}, onDele
     >
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-5 gap-3">
-        <h3 className="text-xl font-bold text-gray-800"> Pravasi List</h3>
+<div className="flex items-center gap-3">
+  <h3 className="text-xl font-bold text-gray-800">Pravasi List</h3>
+
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    onClick={() => exportPravasiToExcel(filtered)}
+    className="px-4 py-1.5 text-sm font-semibold rounded-full
+               bg-emerald-600 text-white shadow
+               hover:bg-emerald-700 transition"
+  >
+    Export
+  </motion.button>
+</div>
+
 
         <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
           <input
