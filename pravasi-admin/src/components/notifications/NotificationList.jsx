@@ -6,14 +6,27 @@ import AnimatedButton from "../Common/button";
 
 export default function NotificationList({ 
   notifications,
-  currentPage,
-  totalPages,
-  onPageChange,
+  // currentPage,
+  // totalPages,
+  // onPageChange,
   onRefresh 
 }) {
   const [loading, setLoading] = useState(false);
   const [editingNotification, setEditingNotification] = useState(null);
   const [deleteId, setDeleteId] = useState(null);
+  const [dateFilter, setDateFilter] = useState(""); // New state for date filter
+
+  // Sort notifications by createdAt (latest first)
+  let filteredNotifications = [...notifications].sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  );
+
+  // Apply date filter if set
+  if (dateFilter) {
+    filteredNotifications = filteredNotifications.filter((n) =>
+      n.createdAt.startsWith(dateFilter)
+    );
+  }
 
   const handleDelete = async () => {
     try {
@@ -32,8 +45,29 @@ export default function NotificationList({
     setEditingNotification(notification);
   };
 
+  // Only show pagination if filteredNotifications > 0 and totalPages > 1 and filteredNotifications.length > 1
+  // const showPagination = filteredNotifications.length > 0 && totalPages > 1 && filteredNotifications.length > 1;
+
   return (
     <div className="space-y-4">
+      {/* Date Filter */}
+      <div className="flex justify-end mb-2">
+        <input
+          type="date"
+          value={dateFilter}
+          onChange={(e) => setDateFilter(e.target.value)}
+          className="border rounded-lg px-3 py-1 text-sm"
+        />
+        {dateFilter && (
+          <button
+            onClick={() => setDateFilter("")}
+            className="ml-2 px-2 py-1 text-xs bg-gray-200 rounded"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
       {/* Confirm Dialog */}
       <ConfirmDialog 
         open={!!deleteId}
@@ -41,55 +75,61 @@ export default function NotificationList({
         onConfirm={handleDelete}
       />
 
-      {notifications.map((notification, index) => (
-        <motion.div
-          key={notification._id}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.1 }}
-          className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative"
-        >
-          <div className="flex justify-between items-start">
-            <div>
-              <h3 className="font-semibold text-gray-800">{notification.title}</h3>
-              <p className="text-gray-600 mt-1">{notification.body}</p>
-            </div>
-            <span className="text-sm text-gray-500">
-              {new Date(notification.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-          
-          {/* <div className="mt-2 flex gap-2">
-            <span className="px-2 py-1 bg-purple-100 text-purple-600 rounded-full text-xs">
-              {notification.data.type}
-            </span>
-            {notification.isRead && (
-              <span className="px-2 py-1 bg-green-100 text-green-600 rounded-full text-xs">
-                Read
+      {filteredNotifications.length === 0 ? (
+        <div className="flex justify-center items-center h-40">
+          <span className="text-gray-500 text-lg">No notifications available</span>
+        </div>
+      ) : (
+        filteredNotifications.map((notification, index) => (
+          <motion.div
+            key={notification._id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative"
+          >
+            <div className="flex justify-between items-start">
+              <div>
+                <h3 className="font-semibold text-gray-800">{notification.title}</h3>
+                <p className="text-gray-600 mt-1">{notification.body}</p>
+              </div>
+              <span className="text-sm text-gray-500">
+                {new Date(notification.createdAt).toLocaleDateString()}
               </span>
-            )}
-          </div> */}
+            </div>
+            
+            {/* <div className="mt-2 flex gap-2">
+              <span className="px-2 py-1 bg-purple-100 text-purple-600 rounded-full text-xs">
+                {notification.data.type}
+              </span>
+              {notification.isRead && (
+                <span className="px-2 py-1 bg-green-100 text-green-600 rounded-full text-xs">
+                  Read
+                </span>
+              )}
+            </div> */}
 
-          {/* Action Buttons */}
-          
-          <div className="absolute bottom-4 right-4 flex gap-2">
-            <button
-              onClick={() => handleUpdate(notification)}
-              disabled={loading}
-              className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => setDeleteId(notification._id)}
-              disabled={loading}
-              className="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
-            >
-              Delete
-            </button>
-          </div>
-        </motion.div>
-      ))}
+            {/* Action Buttons */}
+            
+            <div className="absolute bottom-4 right-4 flex gap-2">
+              <button
+                onClick={() => handleUpdate(notification)}
+                disabled={loading}
+                className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => setDeleteId(notification._id)}
+                disabled={loading}
+                className="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
+              >
+                Delete
+              </button>
+            </div>
+          </motion.div>
+        ))
+      )}
 
       {/* Edit Modal */}
       {editingNotification && (
@@ -103,8 +143,8 @@ export default function NotificationList({
         />
       )}
 
-      {/* Pagination */}
-      {totalPages > 1 && (
+      {/* Pagination: only show if there are enough notifications */}
+      {/* {showPagination && (
         <div className="flex justify-center gap-2 mt-6">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
@@ -120,7 +160,7 @@ export default function NotificationList({
             </button>
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }
