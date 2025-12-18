@@ -7,6 +7,7 @@ export function exportPravasiToExcel(list = []) {
     "S.No": index + 1,
     "Public ID": p.publicId,
     Name: p.name,
+    Email: p.email, // Added email field
     Occupation: p.occupation || "-",
     "Blood Group": p.bloodGroup || "-",
     "Current City": p.currentCity || "-",

@@ -98,9 +98,11 @@ export default function PravasiDrawer({ open, onClose, pravasi }) {
                 <div className="space-y-4">
                   {[
                     ["Phone", pravasi.phone],
+                    ["Email", pravasi.email],
                     ["Blood Group", pravasi.bloodGroup],
                     ["Current City", pravasi.currentCity],
                     ["Permanent City", pravasi.permanentCity],
+
                     ["Verified", pravasi.isVerified ? "Yes" : "No"],
                     ["Paid Member", pravasi.isPaid ? "Yes" : "No"],
                     ["Online", pravasi.isOnline ? "Yes" : "No"],
