@@ -29,6 +29,12 @@ export default function NotificationPage() {
     fetchNotifications();
   }, [currentPage]); // Refresh when page changes
 
+  // Handler to reset to page 1 and fetch notifications (for after sending new notification)
+  const handleSendSuccess = () => {
+    setCurrentPage(1);
+    // fetchNotifications will run due to useEffect when currentPage changes
+  };
+
   return (
     <motion.div 
       className="p-6 max-w-6xl mx-auto"
@@ -38,7 +44,7 @@ export default function NotificationPage() {
     >
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Notifications</h1>
-        <SendNotification onSuccess={fetchNotifications} />
+        <SendNotification onSuccess={handleSendSuccess} />
       </div>
 
       {loading ? (

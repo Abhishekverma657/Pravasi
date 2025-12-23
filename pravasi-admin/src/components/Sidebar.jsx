@@ -22,7 +22,8 @@ export default function Sidebar({ collapsed, setCollapsed }) {
     { name: "Notifications", path: "/notifications" },
     {name:"Chapters", path:"/chapters" },
     {name:"Activity",path:"/activity"},
-    {name:"Sambal Yojna",path:"/sambal-yojna"}
+    {name:"Sambal Yojna",path:"/sambal-yojna"},
+    { name: "Change Password", path: "/change-password" },
     
   ];
 

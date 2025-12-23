@@ -171,6 +171,7 @@ import ChaptersPage from "./pages/ChaptersPage";
 import About from "./pages/About";
 import ActivityPage from "./pages/ActivityPage";
 import SambalYojna from "./pages/SambalYojna";
+import ChangePassword from "./pages/changePassword";
 
 function App() {
   const [collapsed, setCollapsed] = useState(true);
@@ -221,6 +222,7 @@ function App() {
                       <Route path="/chapters/*" element={<ChaptersPage/>} />
                       <Route path="/activity" element={<ActivityPage/>}></Route>
                       <Route path="/sambal-yojna" element={<SambalYojna/>}></Route>
+                      <Route path="/change-password" element={<ChangePassword/>}></Route>
 
                     </Routes>
                   </div>
