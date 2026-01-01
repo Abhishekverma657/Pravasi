@@ -112,13 +112,13 @@ export default function NotificationList({
             {/* Action Buttons */}
             
             <div className="absolute bottom-4 right-4 flex gap-2">
-              <button
+              {/* <button
                 onClick={() => handleUpdate(notification)}
                 disabled={loading}
                 className="bg-blue-50 hover:bg-blue-100 text-blue-600 px-3 py-1.5 rounded-md text-xs font-medium transition-colors"
               >
                 Edit
-              </button>
+              </button> */}
               <button
                 onClick={() => setDeleteId(notification._id)}
                 disabled={loading}
